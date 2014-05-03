@@ -13,9 +13,10 @@
  * 	}
  */
 require_once 'include/db.php';
-require_once 'lib/password.php';
+require_once 'include/lib/password.php';
 
-if(isset($_POST['name'], $_POST['email'], $_POST['password'] && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+if(isset($_POST['name'], $_POST['email'], $_POST['password']) && 
+	$_POST['name'] != "" && $_POST['password'] != "" && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 	$stat = $db->prepare("INSERT INTO `User` (`email`, `password`, `Name`, `power`)
 					VALUES ( :email , :pwd , :name , 0 )");
 	$stat->execute(array(

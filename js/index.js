@@ -51,4 +51,36 @@ $(document).ready(function() {
 					.popover("destroy");
 		regist_form.find(".form-group").removeClass("has-error");
 	});
+
+	regist_form.submit(function() {
+		event.preventDefault();
+
+		if($(this).find("#regist-pwd").val() != $(this).find("#regist-vpwd").val()) {
+			$('<div class="alert alert-danger alert-dismissable">').insertBefore($(this))
+				.html('<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+					"The password and verifying password are different!"
+				);
+			return;
+		}
+		$(".alert-danger").alert("close");
+
+		var subBtn = $('#modal-regist button[type="submit"]').button("loading");
+		$.post('php/user-regist.php', $(this).serialize(), function(data, status) {
+			if(status != "success") {
+				alert("Connection error!");
+			} else if(data.status == "email_exist") {
+				$('<div class="alert alert-danger alert-dismissable">').insertBefore(regist_form)
+					.html('<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+						"The email <strong>" + regist_form.find("#regist-email").val() + "</strong> is used!"
+					);
+			} else if(data.status == "success") {
+				subBtn.text("Success").prop("disabled", true);
+				$('<div class="alert alert-success">').insertAfter(regist_form)
+						.text("The account has been created successfully. Logining in after 5 seconds...");
+				return;
+			}
+
+			subBtn.button("reset");
+		}, 'json');
+	});
 });
