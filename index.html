@@ -1,94 +1,135 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="The system managing flights.">
-    <meta name="author" content="Chih-Yung Liang">
-    <link rel="shortcut icon" href="">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/jumbotron.css" rel="stylesheet">
-    <title>Flight-managing System</title>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="The system managing flights.">
+	<meta name="author" content="Chih-Yung Liang">
+	<link rel="shortcut icon" href="">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/jumbotron.css" rel="stylesheet">
+	<title>Flight-managing System</title>
 
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+	<!-- Just for debugging purposes. Don't actually copy this line! -->
+	<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="#">Flight-managing System</a>
+	</div>
+	<div class="navbar-collapse collapse">
+	<form class="navbar-form navbar-right" role="form">
+		<div class="form-group">
+			<input type="email" placeholder="Email" class="form-control">
+		</div>
+		<div class="form-group">
+			<input type="password" placeholder="Password" class="form-control">
+		</div>
+		<button type="submit" class="btn btn-success">Sign in</button>
+	</form>
+	</div>
+</div>
+</div>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
+<div class="jumbotron">
+<div class="container">
+	<h1>Flight-managing System</h1>
+	<p>This is a system that manage flights, as well as information about countries, airports, etc.</p>
+	<p><a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-regist">Get an account &raquo;</a></p>
+</div>
+</div>
 
-  <body>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<h2>As an administrator</h2>
+			<p>
+				You can manage (usually add, edit, and delete) the information of countries, airports, flights, users. You can also do what users can do.
+			</p>
+		</div>
+		<div class="col-md-4">
+			<h2>As an user</h2>
+			<p>
+				You can look up the information of countries, airports, flights. In addition, you may create watch lists to stay focus on some ticket. You can also do what guests can do.
+			</p>
+			<p>
+				Regist to be a user is easy and free, as the account would be created immediately. Furthermore, An user may raise a request to upgrade to an administrator and wait for administrator to commit.
+			</p>
+		</div>
+		<div class="col-md-4">
+			<h2>As a guest</h2>
+			<p>
+				No registration is required.
+			</p>
+			<p>
+				You can search flight tickets.
+			</p>
+		</div>
+	</div>
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Flight-managing System</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="email" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </div>
+	<hr>
+	<footer>
+		<p>&copy; Chih-Yung Liang 2014</p>
+	</footer>
+</div> <!-- /container -->
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
-      </div>
-    </div>
+<div class="modal fade" id="modal-regist">
+<div class="modal-dialog">
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h4 class="modal-title">Registration</h4>
+	</div>
+	<div class="modal-body">
+		<form id="form-regist" class="form-horizontal" method="POST" action="">
+		<div class="form-group">
+			<label class="control-label col-md-4" for="regist-name">Name:</label>
+			<div class="col-md-8">
+				<input type="text" class="form-control" name="name" id="regist-name" placeholder="Ex: John Smith" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-md-4" for="regist-email">Email:</label>
+			<div class="col-md-8">
+				<input type="email" class="form-control" name="email" id="regist-email" placeholder="Ex: xxx@example.com" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-md-4" for="regist-pwd">Password:</label>
+			<div class="col-md-8">
+				<input type="password" class="form-control" name="password" id="regist-pwd" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-md-4" for="regist-vpwd">Verifying password:</label>
+			<div class="col-md-8">
+				<input type="password" class="form-control" id="regist-vpwd" required>
+			</div>
+		</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" form="form-regist" class="btn btn-success">Regist!</button>
+		<input type="reset" form="form-regist" class="btn btn-default" value="Reset">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	</div>
+</div>
+</div>
+</div>
 
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
-
-      <hr>
-
-      <footer>
-        <p>&copy; Company 2014</p>
-      </footer>
-    </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery-1.11.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-  </body>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/index.js"></script>
+</body>
 </html>
