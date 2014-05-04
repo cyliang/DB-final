@@ -29,9 +29,15 @@ if(isset($_POST['name'], $_POST['email'], $_POST['password']) &&
 		echo json_encode(array(
 			"status" => "email_exist"
 		));
+	} else if($stat->rowCount() === 1) {
+		session_start();
+		$_SESSION['login_id'] = $db->lastInsertID("id");
+		echo json_encode(array(
+			"status" => "success"
+		));
 	} else {
 		echo json_encode(array(
-			"status" => $stat->rowCount() === 1 ? "success" : "fail"
+			"status" => "fail"
 		));
 	}
 } else {
