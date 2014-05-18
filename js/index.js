@@ -83,4 +83,10 @@ $(document).ready(function() {
 			subBtn.button("reset");
 		}, 'json');
 	});
+
+
+	var login_form = $("#form-login");
+	login_form.submit(function() {
+		/* TODO */
+	});
 });

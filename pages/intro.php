@@ -26,12 +26,12 @@
 		<a class="navbar-brand" href="#">Flight-managing System</a>
 	</div>
 	<div class="navbar-collapse collapse">
-	<form class="navbar-form navbar-right" role="form">
+	<form class="navbar-form navbar-right" id="form-login" role="form">
 		<div class="form-group">
-			<input type="email" placeholder="Email" class="form-control">
+			<input type="email" name="email" placeholder="Email" class="form-control">
 		</div>
 		<div class="form-group">
-			<input type="password" placeholder="Password" class="form-control">
+			<input type="password" name="password" placeholder="Password" class="form-control">
 		</div>
 		<button type="submit" class="btn btn-success">Sign in</button>
 	</form>
