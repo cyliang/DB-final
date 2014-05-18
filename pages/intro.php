@@ -7,7 +7,7 @@
 	<meta name="description" content="The system managing flights.">
 	<meta name="author" content="Chih-Yung Liang">
 	<link rel="shortcut icon" href="">
-	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/lib/bootstrap.min.css" rel="stylesheet">
 	<link href="css/jumbotron.css" rel="stylesheet">
 	<title>Flight-managing System</title>
 
@@ -127,8 +127,8 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery-1.11.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/index.js"></script>
+<script src="js/lib/jquery-1.11.1.min.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/intro.js"></script>
 </body>
 </html>
