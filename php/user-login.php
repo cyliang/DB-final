@@ -17,7 +17,7 @@ if(isset($_POST['email'], $_POST['password']) && $_POST['email'] != "" && $_POST
 	$stat = $db->prepare("SELECT `id`, `password` FROM `User` WHERE `email` = ? LIMIT 0, 1");
 	$stat->execute(array($_POST['email']));
 
-	if(($user = $stat->fetch()) && password_verify($_POST['password'], $user['password'])) {
+	if(($user = $stat->fetch()) && password_verify($_POST['email'].$_POST['password'], $user['password'])) {
 		session_start();
 		$_SESSION['login_id'] = $user['id'];
 		

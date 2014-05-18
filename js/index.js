@@ -77,6 +77,9 @@ $(document).ready(function() {
 				subBtn.text("Success").prop("disabled", true);
 				$('<div class="alert alert-success">').insertAfter(regist_form)
 						.text("The account has been created successfully. Logining in after 5 seconds...");
+				setTimeout(function() {
+					location.reload();
+				}, 5000);
 				return;
 			}
 
@@ -87,6 +90,19 @@ $(document).ready(function() {
 
 	var login_form = $("#form-login");
 	login_form.submit(function() {
-		/* TODO */
+		event.preventDefault();
+		$.post('php/user-login.php', $(this).serialize(), function(data, status) {
+			if(status != "success") {
+				alert("Connection error!");
+			} else if(data.status == 'success') {
+				location.reload();
+			}
+			login_form.find('[name="email"]').popover({
+				html: true,
+				trugger: "manual",
+				content: '<span class="text-danger">The email or password is not correct!</span>',
+				placement: 'bottom'
+			}).popover("show");
+		}, 'json');
 	});
 });

@@ -1,4 +1,5 @@
 <?php
+require_once 'php/include/db.php';
 require_once 'php/include/functs.php';
 
 if($user = test_login(false)) {
