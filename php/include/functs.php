@@ -6,7 +6,7 @@ function test_login($admin) {
 	}
 	global $db;
 
-	$stat = $db->prepare("SELECT `id`, `Name`, `power` FROM `User` WHERE `id` = ? LIMIT 1");
+	$stat = $db->prepare("SELECT `id`, `Name`, `email`, `power` FROM `User` WHERE `id` = ? LIMIT 1");
 	$stat->execute(array($_SESSION['login_id']));
 	return $stat->fetchObject();
 }
