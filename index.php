@@ -63,6 +63,7 @@ if($user = test_login(false)) {
 	<small class="funct">Welcome</small>
 </h1>
 <hr>
+<div class="main"></div>
 </div>
 
 <script src="js/lib/jquery-1.11.1.min.js"></script>
