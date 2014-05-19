@@ -1,4 +1,6 @@
 $(document).ready(function() {
-	$("").sidr();
+	$("").sidr({
+		displace: false
+	});
 	$.sidr("open");
 });

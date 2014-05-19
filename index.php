@@ -13,6 +13,7 @@ if($user = test_login(false)) {
 
 	<link rel="stylesheet" href="css/lib/jquery.sidr.<?=$user->power == 1 ? "dark" : "light"?>.css">
 	<link rel="stylesheet" href="css/lib/bootstrap.min.css">
+	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/lib/custom-theme/jquery-ui-1.10.4.custom.min.css">
 </head>
 <body>
@@ -41,7 +42,7 @@ if($user = test_login(false)) {
 			<?php } ?>
 			</ul>
 		</li>
-		<li><a>Logout</a></li>
+		<li><a href="#" data-target="logout">Logout</a></li>
 	</ul>
 
 	<h2>Ticket</h2>
@@ -59,8 +60,9 @@ if($user = test_login(false)) {
 <div class="container">
 <h1 class="text-center">
 	Flight-managing System<br>
-	<small>sub-title</small>
+	<small class="funct">Welcome</small>
 </h1>
+<hr>
 </div>
 
 <script src="js/lib/jquery-1.11.1.min.js"></script>
