@@ -12,6 +12,10 @@ $(document).ready(function() {
 			menu.actions[target]();
 		}
 	});
+
+	$("#main").table({
+		source: "php/country-view.php"
+	});
 });
 
 var menu = Object();
