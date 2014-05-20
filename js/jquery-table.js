@@ -19,11 +19,15 @@ $.widget("custom.table", {
 		var _this = this;
 		abPost(this.options.source, {}, function(data) {
 			_this.data = data;
-
+			_this.column = new Object();
 			var theadRow = _this.table.find("thead tr")
+
 			for(var col in data.data[0]) {
-				$("<th>").appendTo(theadRow)
-		       			.text(col);
+				_this.column[col] = $("<th>").appendTo(theadRow)
+		       					.text(col)
+							.click(function() {
+								_this._sort(col);
+							});
 			}
 
 			_this._refresh();
@@ -36,24 +40,69 @@ $.widget("custom.table", {
 		this.ctrl.firstBtn = $("<button>First page</button>")
 					.appendTo(
 						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-primary btn-block");
+					).addClass("btn btn-primary btn-block")
+					.click(function() {
+						_this._refetch("first");
+					});
 		this.ctrl.prevBtn = $("<button>Previous page</button>")
 					.appendTo(
 						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-default btn-block");
+					).addClass("btn btn-default btn-block")
+					.click(function() {
+						_this._refetch("prev");
+					});
 		this.ctrl.pageInput = $('<input type="text">')
 					.appendTo(
 						$('<div class="col-md-4">').appendTo(this.ctrl.row)
 					).addClass("form-control")
-					.attr("placeholder", "Input page no. to jump. (1/4)");
+					.on("input", function() {
+						_this._refetch($(this).val());
+					});
 		this.ctrl.nextBtn = $("<button>Next page</button>")
 					.appendTo(
 						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-default btn-block");
+					).addClass("btn btn-default btn-block")
+					.click(function() {
+						_this._refetch("next");
+					});
 		this.ctrl.lastBtn = $("<button>Last page</button>")
 					.appendTo(
 						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-primary btn-block");
+					).addClass("btn btn-primary btn-block")
+					.click(function() {
+						_this._refetch("last");
+					});
+	},
+	_refetch: function(page) {
+		switch(page) {
+		case "first":
+			page = 1;
+			break;
+		case "last":
+			page = this.data.totalPage;
+			break;
+		case "next":
+			page = this.ctrl.nowPage + 1;
+			break;
+		case "prev":
+			page = this.ctrl.nowPage - 1;
+			break;
+		}
+
+		if(page >= 1) {
+			this.ctrl.nowPage = Number(page);
+			var _this = this;
+
+			abPost(this.options.source, {
+				page: page
+			}, function(data) {
+				_this.data = data;
+				_this._refresh();
+			});
+		}
+	},
+	_sort: function(col) {
+		/* TODO */
 	},
 	_refresh: function() {
 		var tbody = this.table.find("tbody").empty();
@@ -70,7 +119,7 @@ $.widget("custom.table", {
 			"Input page no. to jump.   (" + 
 			this.ctrl.nowPage + "/" + 
 			this.data.totalPage + ")"
-		);
+		).val("");
 		if(this.ctrl.nowPage > 1) {
 			this.ctrl.firstBtn.add(this.ctrl.prevBtn).removeAttr("disabled");
 		} else {
