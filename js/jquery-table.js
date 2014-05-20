@@ -24,7 +24,7 @@ $.widget("custom.table", {
 
 			for(var col in data.data[0]) {
 				_this.column[col] = $("<th>").appendTo(theadRow)
-		       					.text(col)
+		       					.text(col + " ")
 							.click(function() {
 								_this._sort(col);
 							});
@@ -33,45 +33,58 @@ $.widget("custom.table", {
 			_this._refresh();
 		});
 
-		this.ctrl = new Object();
-		this.ctrl.nowPage = 1;
+		this.ctrlPage = new Object();
+		this.ctrlPage.nowPage = 1;
 
-		this.ctrl.row = $('<div class="row">').insertAfter(this.table);
-		this.ctrl.firstBtn = $("<button>First page</button>")
+		this.ctrlPage.row = $('<div class="row">').insertAfter(this.table);
+
+		var btnGroup1 = $('<div class="btn-group btn-group-justified">').appendTo(
+					$('<div class="col-md-4">').appendTo(this.ctrlPage.row)
+				);
+		this.ctrlPage.firstBtn = $("<button>First page</button>")
 					.appendTo(
-						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-primary btn-block")
+						$('<div class="btn-group">').appendTo(btnGroup1)
+					).addClass("btn btn-primary")
 					.click(function() {
 						_this._refetch("first");
 					});
-		this.ctrl.prevBtn = $("<button>Previous page</button>")
+		this.ctrlPage.prevBtn = $("<button>Previous page</button>")
 					.appendTo(
-						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-default btn-block")
+						$('<div class="btn-group">').appendTo(btnGroup1)
+					).addClass("btn btn-default")
 					.click(function() {
 						_this._refetch("prev");
 					});
-		this.ctrl.pageInput = $('<input type="text">')
+
+		this.ctrlPage.pageInput = $('<input type="text">')
 					.appendTo(
-						$('<div class="col-md-4">').appendTo(this.ctrl.row)
+						$('<div class="col-md-4">').appendTo(this.ctrlPage.row)
 					).addClass("form-control")
 					.on("input", function() {
 						_this._refetch($(this).val());
 					});
-		this.ctrl.nextBtn = $("<button>Next page</button>")
+
+		var btnGroup2 = $('<div class="btn-group btn-group-justified">').appendTo(
+					$('<div class="col-md-4">').appendTo(this.ctrlPage.row)
+				);
+		this.ctrlPage.nextBtn = $("<button>Next page</button>")
 					.appendTo(
-						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-default btn-block")
+						$('<div class="btn-group">').appendTo(btnGroup2)
+					).addClass("btn btn-default")
 					.click(function() {
 						_this._refetch("next");
 					});
-		this.ctrl.lastBtn = $("<button>Last page</button>")
+		this.ctrlPage.lastBtn = $("<button>Last page</button>")
 					.appendTo(
-						$('<div class="col-md-2">').appendTo(this.ctrl.row)
-					).addClass("btn btn-primary btn-block")
+						$('<div class="btn-group">').appendTo(btnGroup2)
+					).addClass("btn btn-primary")
 					.click(function() {
 						_this._refetch("last");
 					});
+
+		this.ctrlOrder = new Object();
+		this.ctrlOrder.col = null;
+		this.ctrlOrder.ord = "ASC";
 	},
 	_refetch: function(page) {
 		switch(page) {
@@ -82,15 +95,15 @@ $.widget("custom.table", {
 			page = this.data.totalPage;
 			break;
 		case "next":
-			page = this.ctrl.nowPage + 1;
+			page = this.ctrlPage.nowPage + 1;
 			break;
 		case "prev":
-			page = this.ctrl.nowPage - 1;
+			page = this.ctrlPage.nowPage - 1;
 			break;
 		}
 
 		if(page >= 1) {
-			this.ctrl.nowPage = Number(page);
+			this.ctrlPage.nowPage = Number(page);
 			var _this = this;
 
 			abPost(this.options.source, {
@@ -102,7 +115,20 @@ $.widget("custom.table", {
 		}
 	},
 	_sort: function(col) {
-		/* TODO */
+		if(this.ctrlOrder.col != null) {
+			this.column[this.ctrlOrder.col].text(col + " ");
+		}
+
+		if(col == this.ctrlOrder.col) {
+			this.ctrlOrder.ord = this.ctrlOrder.ord == "ASC" ? "DESC" : "ASC";
+		} else {
+			this.ctrlOrder.col = col;
+			this.ctrlOrder.ord = "ASC";
+		}
+
+		this._refetch("first");
+		$('<span>').appendTo(this.column[col])
+			.addClass('glyphicon glyphicon-circle-arrow-' + (this.ctrlOrder.ord == "ASC" ? "up text-danger" : "down text-success"));
 	},
 	_refresh: function() {
 		var tbody = this.table.find("tbody").empty();
@@ -115,20 +141,20 @@ $.widget("custom.table", {
 			}
 		}
 
-		this.ctrl.pageInput.attr("placeholder", 
+		this.ctrlPage.pageInput.attr("placeholder", 
 			"Input page no. to jump.   (" + 
-			this.ctrl.nowPage + "/" + 
+			this.ctrlPage.nowPage + "/" + 
 			this.data.totalPage + ")"
 		).val("");
-		if(this.ctrl.nowPage > 1) {
-			this.ctrl.firstBtn.add(this.ctrl.prevBtn).removeAttr("disabled");
+		if(this.ctrlPage.nowPage > 1) {
+			this.ctrlPage.firstBtn.add(this.ctrlPage.prevBtn).removeAttr("disabled");
 		} else {
-			this.ctrl.firstBtn.add(this.ctrl.prevBtn).attr("disabled", "disabled");
+			this.ctrlPage.firstBtn.add(this.ctrlPage.prevBtn).attr("disabled", "disabled");
 		}
-		if(this.ctrl.nowPage < this.data.totalPage) {
-			this.ctrl.lastBtn.add(this.ctrl.nextBtn).removeAttr("disabled");
+		if(this.ctrlPage.nowPage < this.data.totalPage) {
+			this.ctrlPage.lastBtn.add(this.ctrlPage.nextBtn).removeAttr("disabled");
 		} else {
-			this.ctrl.lastBtn.add(this.ctrl.nextBtn).attr("disabled", "disabled");
+			this.ctrlPage.lastBtn.add(this.ctrlPage.nextBtn).attr("disabled", "disabled");
 		}
 	}
 });
