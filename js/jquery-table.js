@@ -106,9 +106,14 @@ $.widget("custom.table", {
 			this.ctrlPage.nowPage = Number(page);
 			var _this = this;
 
-			abPost(this.options.source, {
-				page: page
-			}, function(data) {
+			var postData = new Object;
+			postData.page = page;
+			if(this.ctrlOrder.col != null) {
+				postData.order_col = this.ctrlOrder.col;
+				postData.order_ord = this.ctrlOrder.ord;
+			}
+
+			abPost(this.options.source, postData, function(data) {
 				_this.data = data;
 				_this._refresh();
 			});

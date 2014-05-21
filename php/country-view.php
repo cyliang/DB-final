@@ -1,7 +1,12 @@
 <?php
 require_once 'include/db.php';
 
-$stat = $db->prepare("SELECT `Name` FROM `Country` LIMIT :page, 10");
+$col_ary = array("Name");
+$order_str = isset($_POST['order_col'], $_POST['order_ord']) && in_array($_POST['order_col'], $col_ary) ? 
+	"ORDER BY {$_POST['order_col']} ".($_POST['order_ord'] == "ASC" ? "ASC" : "DESC") :
+	"";
+
+$stat = $db->prepare("SELECT `Name` FROM `Country` $order_str LIMIT :page, 10");
 $stat->bindValue(
 	':page',
 	isset($_POST['page']) && filter_var($_POST['page'], FILTER_VALIDATE_INT) ? ($_POST['page'] - 1) * 10 : 0,
