@@ -36,6 +36,8 @@ $.widget("custom.table", {
 		       					.text(col + " ")
 							.click(function() {
 								_this._sort(col);
+							}).tooltip({
+								title: "Click to sort by " + col
 							});
 				_this.ctrlSearch.select.append('<option value="' + col + '">' + col + '</option>');
 			}
