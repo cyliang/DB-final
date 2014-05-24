@@ -70,6 +70,7 @@ if($user = test_login()) {
 <script src="js/lib/jquery.sidr.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
 <script src="js/jquery-table.js"></script>
+<script src="js/airport-table.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/abPost.js"></script>
 

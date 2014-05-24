@@ -55,13 +55,13 @@ menu.actions = {
 	},
 	airport: {
 		construct: function() {
-			$("#main").table({
+			$("#main").table_airport({
 				source: 'php/airport-view.php'
 			});
 			changeTitle("Airports");
 		},
 		destruct: function() {
-			$("#main").table("destroy");
+			$("#main").table_airport("destroy");
 		}
 	}
 };
