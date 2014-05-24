@@ -6,6 +6,15 @@ $.widget("custom.table", {
 		border: false
 	},
 	_create: function() {
+		this.ctrlSearch = new Object;
+		this.ctrlSearch.row = $('<div class="row">').appendTo(this.element);
+		this.ctrlSearch.selectCol = $('<div class="col-md-3 col-md-offset-9">').appendTo(this.ctrlSearch.row);
+		this.ctrlSearch.inputCol = $('<div class="col-md-3 col-md-push-6">').appendTo(this.ctrlSearch.row).hide();
+		this.ctrlSearch.select = $('<select class="form-control">')
+						.appendTo(this.ctrlSearch.selectCol)
+						.append('<option value="noselect" disabled selected>Search for</option>');
+		this.ctrlSearch.input = $('<input type="text" class="form-control">').appendTo(this.ctrlSearch.inputCol);
+
 		this.table = $("<table>")
 				.appendTo(this.element)
 				.addClass("table table-striped table-hover")
@@ -28,6 +37,7 @@ $.widget("custom.table", {
 							.click(function() {
 								_this._sort(col);
 							});
+				_this.ctrlSearch.select.append('<option value="' + col + '">' + col + '</option>');
 			}
 
 			_this._refresh();
@@ -85,6 +95,25 @@ $.widget("custom.table", {
 		this.ctrlOrder = new Object();
 		this.ctrlOrder.col = null;
 		this.ctrlOrder.ord = "ASC";
+
+		this.ctrlSearch.col = "noselect";
+		this.ctrlSearch.val = "";
+		this.ctrlSearch.select.change(function() {
+			if((_this.ctrlSearch.col = $(this).val()) != "noselect") {
+				_this.ctrlSearch.inputCol.show();
+				_this.ctrlSearch.selectCol.removeClass("col-md-offset-9")
+							.addClass("col-md-push-6");
+				_this.ctrlSearch.input.attr("placeholder", 'Search for "' + $(this).val() + '"...');
+			} else {
+				_this.ctrlSearch.inputCol.hide();
+				_this.ctrlSearch.selectCol.addClass("col-md-offset-9")
+							.removeClass("col-md-push-6");
+			}
+		});
+		this.ctrlSearch.input.on("input", function() {
+			_this.ctrlSearch.val = $(this).val();
+			_this._refetch("first");
+		});
 	},
 	_refetch: function(page) {
 		switch(page) {
@@ -111,6 +140,10 @@ $.widget("custom.table", {
 			if(this.ctrlOrder.col != null) {
 				postData.order_col = this.ctrlOrder.col;
 				postData.order_ord = this.ctrlOrder.ord;
+			}
+			if(this.ctrlSearch.col != "noselect" && this.ctrlSearch.val != "") {
+				postData.search_col = this.ctrlSearch.col;
+				postData.search_val = this.ctrlSearch.val;
 			}
 
 			abPost(this.options.source, postData, function(data) {
