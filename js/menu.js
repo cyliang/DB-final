@@ -12,10 +12,6 @@ $(document).ready(function() {
 			menu.actions[target]();
 		}
 	});
-
-	$("#main").table({
-		source: "php/country-view.php"
-	});
 });
 
 var menu = Object();
@@ -25,6 +21,11 @@ menu.actions = {
 			if(status == 'success') {
 				location.reload();
 			}
+		});
+	},
+	country: function() {
+		$("#main").empty().table({
+			source: 'php/country-view.php'
 		});
 	}
 };

@@ -26,7 +26,7 @@ if($user = test_login()) {
 			<ul>
 				<li><a href="#">Airports</a></li>
 				<li><a href="#">Citys</a></li>
-				<li><a href="#">Countrys</a></li>
+				<li><a href="#" data-target="country">Countrys</a></li>
 			</ul>
 		</li>
 	<?php if($user->power == 1) { ?>
