@@ -34,10 +34,12 @@ $.widget("custom.table", {
 			for(var col in data.data[0]) {
 				_this.column[col] = $("<th>").appendTo(theadRow)
 		       					.text(col + " ")
+							.attr("data-content", col)
 							.click(function() {
-								_this._sort(col);
+								_this._sort($(this).attr("data-content"));
 							}).tooltip({
-								title: "Click to sort by " + col
+								title: "Click to sort by " + col,
+								container: "body"
 							});
 				_this.ctrlSearch.select.append('<option value="' + col + '">' + col + '</option>');
 			}
@@ -116,6 +118,9 @@ $.widget("custom.table", {
 			_this.ctrlSearch.val = $(this).val();
 			_this._refetch("first");
 		});
+	},
+	_destroy: function() {
+		this.element.empty();
 	},
 	_refetch: function(page) {
 		switch(page) {

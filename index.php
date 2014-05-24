@@ -24,8 +24,8 @@ if($user = test_login()) {
 		<li>
 			<a href="#">Airlines</a>
 			<ul>
-				<li><a href="#">Airports</a></li>
-				<li><a href="#">Citys</a></li>
+				<li><a href="#" data-target="airport">Airports</a></li>
+				<li><a href="#" data-target="city">Citys</a></li>
 				<li><a href="#" data-target="country">Countrys</a></li>
 			</ul>
 		</li>

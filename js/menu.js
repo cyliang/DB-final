@@ -9,23 +9,64 @@ $(document).ready(function() {
 		if(target in menu.actions) {
 			$('#sidr li').removeClass('active');
 			$(this).parent().addClass('active');
-			menu.actions[target]();
+
+			if(menu.current != null && "destruct" in menu.actions[menu.current]) {
+				menu.actions[menu.current].destruct();
+			}
+			menu.current = target;
+			menu.actions[target].construct();
 		}
 	});
 });
 
 var menu = Object();
+menu.current = null;
 menu.actions = {
-	logout: function() {
-		$.post('php/user-logout.php', function(data, status) {
-			if(status == 'success') {
-				location.reload();
-			}
-		});
+	logout: {
+		construct: function() {
+			$.post('php/user-logout.php', function(data, status) {
+				if(status == 'success') {
+					location.reload();
+				}
+			});
+		}
 	},
-	country: function() {
-		$("#main").empty().table({
-			source: 'php/country-view.php'
-		});
+	country: {
+		construct: function() {
+			$("#main").table({
+				source: 'php/country-view.php'
+			});
+			changeTitle("Countrys");
+		},
+		destruct: function() {
+			$("#main").table("destroy");
+		}
+	},
+	city: {
+		construct: function() {
+			$("#main").table({
+				source: 'php/city-view.php'
+			});
+			changeTitle("Citys");
+		},
+		destruct: function() {
+			$("#main").table("destroy");
+		}
+	},
+	airport: {
+		construct: function() {
+			$("#main").table({
+				source: 'php/airport-view.php'
+			});
+			changeTitle("Airports");
+		},
+		destruct: function() {
+			$("#main").table("destroy");
+		}
 	}
 };
+
+function changeTitle(title) {
+	$("title").text("Flight-managing System - " + title);
+	$(".funct").text(title);
+}
