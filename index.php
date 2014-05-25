@@ -12,10 +12,11 @@ if($user = test_login()) {
 
 	<link rel="stylesheet" href="css/lib/jquery.sidr.<?=$user->power == 1 ? "dark" : "light"?>.css">
 	<link rel="stylesheet" href="css/lib/bootstrap.min.css">
+	<link rel="stylesheet" href="css/lib/jquery.remodal.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/lib/custom-theme/jquery-ui-1.10.4.custom.min.css">
 </head>
-<body>
+<body><div class="remodal-bg">
 
 <div id="sidr">
 	<h1>Flight-managing System</h1>
@@ -68,13 +69,14 @@ if($user = test_login()) {
 <script src="js/lib/jquery-1.11.1.min.js"></script>
 <script src="js/lib/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="js/lib/jquery.sidr.min.js"></script>
+<script src="js/lib/jquery.remodal.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
 <script src="js/jquery-table.js"></script>
 <script src="js/airport-table.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/abPost.js"></script>
 
-</body>
+</div></body>
 </html>
 <?php
 } else {
