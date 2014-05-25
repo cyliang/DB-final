@@ -140,6 +140,9 @@ $.widget("custom.table", {
 		case "prev":
 			page = this.ctrlPage.nowPage - 1;
 			break;
+		case "now":
+			page = this.ctrlPage.nowPage;
+			break;
 		}
 
 		if(page >= 1) {
@@ -181,6 +184,7 @@ $.widget("custom.table", {
 	},
 	_refresh: function() {
 		var tbody = this.table.find("tbody").empty();
+		var _this = this;
 
 		for(var row in this.data.data) {
 			var tr = $("<tr>").appendTo(tbody);
@@ -189,14 +193,61 @@ $.widget("custom.table", {
 				$("<td>").appendTo(tr).append(
 					$('<a href="#"></a>')
 					.append('<span class="glyphicon glyphicon-pencil text-warning"></span>')
+					.attr("data-target", row)
 					.click(function() {
-						alert("edit");
+						var rowData = _this.data.data[$(this).attr("data-target")];
+
+						var editModal = $('<div>').appendTo(_this.element).html(
+							'<h1 class="text-warning">Modification</h1>' +
+							'<p>Leave blank for not changing</p>' +
+							'<a href="#" class="remodal-cancel">Cancel</a>' +
+							'<a href="#" class="remodal-confirm">OK</a>'
+						);
+
+						/* TODO */
+
+						editModal.remodal().open();
+						editModal.on('confirm', function() {
+							/* TODO */
+						});
+						editModal.on('closed', function() {
+							$(this).remove();
+							$(".remodal-overlay").remove();
+						});
 					})
 				).append(
 					$('<a href="#"></a>')
 					.append('<span class="glyphicon glyphicon-trash text-danger"></span>')
+					.attr("data-target", row)
 					.click(function() {
-						alert("delete");
+						var rowData = _this.data.data[$(this).attr("data-target")];
+
+						var deleteModal = $('<div>').appendTo(_this.element).html(
+							'<h1 class="text-danger">Warning!</h1>' +
+							'<p>Do you really want to delete the following data?</p>' +
+							'<blockquote class="text-left"><dl class="dl-horizontal"></dl></blockquote>' +
+							'<br>' +
+							'<a href="#" class="remodal-cancel">OK</a>' +
+							'<a href="#" class="remodal-confirm">Cancel</a>'
+						);
+						var deleteDscr = deleteModal.find("dl");
+						for(var col in rowData) {
+							$("<dt>").appendTo(deleteDscr).text(col);
+							$("<dd>").appendTo(deleteDscr).text(rowData[col]);
+						}
+
+						deleteModal.remodal().open();
+						deleteModal.on('cancel', function() {
+							abPost('php/country-delete.php', {
+								key: rowData[_this.data.primary]
+							}, function(data) {
+								_this._refetch("now");
+							});
+						});
+						deleteModal.on('closed', function() {
+							$(this).remove();
+							$(".remodal-overlay").remove();
+						});
 					})
 				)
 			}

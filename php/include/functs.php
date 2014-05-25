@@ -49,4 +49,22 @@ function read_table($table_name, $col_ary, $primary_key) {
 		)
 	));
 }
+
+function remove_entry($table_name, $primary_key) {
+	global $db;
+
+	if(isset($_POST['key'])) {
+		$stat = $db->prepare("DELETE FROM `$table_name` WHERE `$primary_key` = ?");
+		$stat->execute(array($_POST['key']));
+
+		echo json_encode(array(
+			"status" => $stat->rowCount() === 1 ? "success" : "fail",
+			"data" => array()
+		));
+	} else {
+		echo json_encode(array(
+			"status" => "fail"
+		));
+	}
+}
 ?>
