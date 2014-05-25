@@ -10,5 +10,5 @@ read_table("airport_view", array(
 	"Timezone",
 	"City",
 	"Country"
-));
+), "IATA");
 ?>

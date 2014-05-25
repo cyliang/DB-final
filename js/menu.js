@@ -34,7 +34,8 @@ menu.actions = {
 	country: {
 		construct: function() {
 			$("#main").table({
-				source: 'php/country-view.php'
+				source: 'php/country-view.php',
+				editable: true
 			});
 			changeTitle("Countrys");
 		},

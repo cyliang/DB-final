@@ -13,7 +13,7 @@ function test_login() {
 	return $stat->fetchObject();
 }
 
-function read_table($table_name, $col_ary) {
+function read_table($table_name, $col_ary, $primary_key) {
 	global $db;
 
 	$order_str = isset($_POST['order_col'], $_POST['order_ord']) && in_array($_POST['order_col'], $col_ary) ? 
@@ -44,7 +44,8 @@ function read_table($table_name, $col_ary) {
 		"status" => "success",
 		"data" => array(
 			"data" => $stat->fetchAll(PDO::FETCH_ASSOC),
-			"totalPage" => ceil($stat2->fetchColumn() / 10)
+			"totalPage" => ceil($stat2->fetchColumn() / 10),
+			"primary" => $primary_key
 		)
 	));
 }

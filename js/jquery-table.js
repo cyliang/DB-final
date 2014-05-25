@@ -31,6 +31,10 @@ $.widget("custom.table", {
 			_this.column = new Object();
 			var theadRow = _this.table.find("thead tr")
 
+			if(_this.options.editable) {
+				_this.column.modify = $("<th>Modify</th>").appendTo(theadRow);
+			}
+
 			for(var col in data.data[0]) {
 				_this.column[col] = $("<th>").appendTo(theadRow)
 		       					.text(col + " ")
@@ -180,6 +184,22 @@ $.widget("custom.table", {
 
 		for(var row in this.data.data) {
 			var tr = $("<tr>").appendTo(tbody);
+
+			if(this.options.editable) {
+				$("<td>").appendTo(tr).append(
+					$('<a href="#"></a>')
+					.append('<span class="glyphicon glyphicon-pencil text-warning"></span>')
+					.click(function() {
+						alert("edit");
+					})
+				).append(
+					$('<a href="#"></a>')
+					.append('<span class="glyphicon glyphicon-trash text-danger"></span>')
+					.click(function() {
+						alert("delete");
+					})
+				)
+			}
 			for(var col in this.data.data[row]) {
 				$("<td>").appendTo(tr)
 					.text(this.data.data[row][col]);

@@ -5,5 +5,5 @@ require_once 'include/functs.php';
 read_table("Country", array(
 	"Name",
 	"Abbreviation"
-));
+), "Name");
 ?>
