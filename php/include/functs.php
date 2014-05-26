@@ -98,4 +98,11 @@ function edit_entry($table_name, $primary_key, $changeable_col) {
 		));
 	}
 }
+
+function column_all($table_name, $col_name) {
+	global $db;
+
+	$stat = $db->query("SELECT `$col_name` FROM `$table_name`");
+	echo json_encode($stat->fetchAll(PDO::FETCH_COLUMN));
+}
 ?>

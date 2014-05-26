@@ -35,9 +35,11 @@ menu.actions = {
 		construct: function() {
 			$("#main").table({
 				source: 'php/country-view.php',
-				editable: {
-					Abbreviation: "text"
-				}
+				editTarget: 'php/country-edit.php',
+				editable: user.power == 1 ? {
+					Name: $('<input type="text" pattern="^.*\\S.*$" title="Cannot contain only spaces.">'),
+					Abbreviation: $('<input type="text" pattern="^\\S{1,3}$" title="An Abbreviation with no more than three characters.">')
+				} : false
 			});
 			changeTitle("Countrys");
 		},
@@ -48,7 +50,28 @@ menu.actions = {
 	city: {
 		construct: function() {
 			$("#main").table({
-				source: 'php/city-view.php'
+				source: 'php/city-view.php',
+				editTarget: 'php/city-edit.php',
+				editable: user.power == 1 ? {
+					Name: $('<input type="text" pattern="^.*\\S.*$" title="Cannot contain only spaces.">'),
+					Country: $('<select>').html(function(index, old) {
+						var countrys;
+						$.ajax({
+							dataType: 'json',
+							url: 'php/country-all.php',
+							async: false,
+							success: function(data) {
+								countrys = data;
+							}
+						});
+
+						return '<option value=""></option><option>' + countrys.join('</option><option>') + '</option>';
+					}).each(function() {
+						$(this).find("option").each(function() {
+							$(this).attr("value", $(this).text());
+						})
+					})
+				} : false
 			});
 			changeTitle("Citys");
 		},

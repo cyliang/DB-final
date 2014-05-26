@@ -66,6 +66,9 @@ if($user = test_login()) {
 <div id="main"></div>
 </div>
 
+<script>
+var user = <?=json_encode($user)?>;
+</script>
 <script src="js/lib/jquery-1.11.1.min.js"></script>
 <script src="js/lib/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="js/lib/jquery.sidr.min.js"></script>

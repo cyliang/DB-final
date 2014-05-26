@@ -204,20 +204,23 @@ $.widget("custom.table", {
 
 						var editForm = $('<form class="form-horizontal">').appendTo(editModal);
 						for(var col in rowData) {
-							var colInput = $('<input class="form-control" required>').appendTo(
+							var colInput;
+
+							if(col in _this.options.editable) {
+								colInput = _this.options.editable[col].clone().attr("name", col);
+							} else {
+								colInput = $('<input disabled>');
+							}
+
+							colInput.appendTo(
 								$('<div class="col-md-9">').appendTo(
 									$('<div class="form-group">').appendTo(editForm).append(
 										'<div class="col-md-3 control-label">' + col + '</div>'
 									)
 								)
-							).attr("type", _this.options.editable[col])
+							).addClass("form-control")
 							.attr("placeholder", rowData[col]);
 
-							if(col in _this.options.editable) {
-								colInput.attr("name", col);
-							} else {
-								colInput.attr("disabled", "");
-							}
 						}
 						$('<input type="hidden" name="key">').appendTo(editForm)
 										.val(rowData[_this.data.primary]);
@@ -234,7 +237,7 @@ $.widget("custom.table", {
 						editForm.submit(function() {
 							event.preventDefault();
 
-							abPost('php/country-edit.php', $(this).serialize(), function(data) {
+							abPost(_this.options.editTarget, $(this).serialize(), function(data) {
 								$.remodal.lookup[editModal.data('remodal')].close();
 								_this._refetch("now");
 							});
