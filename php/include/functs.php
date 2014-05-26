@@ -67,4 +67,35 @@ function remove_entry($table_name, $primary_key) {
 		));
 	}
 }
+
+function edit_entry($table_name, $primary_key, $changeable_col) {
+	if(isset($_POST['key'])) {
+		$col_ary = array();
+		$val_ary = array();
+
+		foreach($changeable_col as $col) {
+			if(isset($_POST[$col]) && $_POST[$col] != "") {
+				$col_ary[] = $col;
+				$val_ary[] = $_POST[$col];
+			}
+		}
+
+		if(count($col_ary) > 0) {
+			global $db;
+
+			$stat = $db->prepare("UPDATE `$table_name` SET `".join('` = ?, `', $col_ary)."` = ?
+					WHERE `$primary_key` = ?");
+			$val_ary[] = $_POST['key'];
+			$stat->execute($val_ary);
+		}
+		echo json_encode(array(
+			"status" => "success",
+			"data" => array()
+		));
+	} else {
+		echo json_encode(array(
+			"status" => "fail"
+		));
+	}
+}
 ?>

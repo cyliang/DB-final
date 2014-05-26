@@ -189,7 +189,7 @@ $.widget("custom.table", {
 		for(var row in this.data.data) {
 			var tr = $("<tr>").appendTo(tbody);
 
-			if(this.options.editable) {
+			if(this.options.editable !== false) {
 				$("<td>").appendTo(tr).append(
 					$('<a href="#"></a>')
 					.append('<span class="glyphicon glyphicon-pencil text-warning"></span>')
@@ -199,17 +199,48 @@ $.widget("custom.table", {
 
 						var editModal = $('<div>').appendTo(_this.element).html(
 							'<h1 class="text-warning">Modification</h1>' +
-							'<p>Leave blank for not changing</p>' +
-							'<a href="#" class="remodal-cancel">Cancel</a>' +
-							'<a href="#" class="remodal-confirm">OK</a>'
+							'<p>Leave blank for not changing</p>'
 						);
 
-						/* TODO */
+						var editForm = $('<form class="form-horizontal">').appendTo(editModal);
+						for(var col in rowData) {
+							var colInput = $('<input class="form-control" required>').appendTo(
+								$('<div class="col-md-9">').appendTo(
+									$('<div class="form-group">').appendTo(editForm).append(
+										'<div class="col-md-3 control-label">' + col + '</div>'
+									)
+								)
+							).attr("type", _this.options.editable[col])
+							.attr("placeholder", rowData[col]);
+
+							if(col in _this.options.editable) {
+								colInput.attr("name", col);
+							} else {
+								colInput.attr("disabled", "");
+							}
+						}
+						$('<input type="hidden" name="key">').appendTo(editForm)
+										.val(rowData[_this.data.primary]);
+
+						$('<div class="row">').appendTo(editForm).append(
+							$('<div class="col-md-3 col-md-push-3">').append(
+								$('<button type="button" class="btn btn-danger btn-block">Cancel</button>').click(function() {
+									$.remodal.lookup[editModal.data('remodal')].close()
+								})
+							)
+						).append(
+							$('<div class="col-md-3 col-md-push-3"><button type="submit" class="btn btn-success btn-block">OK</button></div>')
+						);
+						editForm.submit(function() {
+							event.preventDefault();
+
+							abPost('php/country-edit.php', $(this).serialize(), function(data) {
+								$.remodal.lookup[editModal.data('remodal')].close();
+								_this._refetch("now");
+							});
+						});
 
 						editModal.remodal().open();
-						editModal.on('confirm', function() {
-							/* TODO */
-						});
 						editModal.on('closed', function() {
 							$(this).remove();
 							$(".remodal-overlay").remove();

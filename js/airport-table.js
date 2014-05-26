@@ -1,14 +1,15 @@
 $.widget("custom.table_airport", $.custom.table, {
 	_create: function() {
-		var _this = this;
+		this.MapTheadSet = false;
 
 		this._super();
-		$(document).ajaxSuccess(function() {
-			_this.table.find("thead tr").append("<th>Map</th>");
-		});
 	},
 	_refresh: function() {
 		this._super();
+		if(!this.MapTheadSet) {
+			this.table.find("thead tr").append("<th>Map</th>");
+			this.MapTheadSet = true;
+		}
 
 		var _this = this;
 		this.table.find("tbody tr").each(function() {
