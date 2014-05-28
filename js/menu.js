@@ -37,10 +37,15 @@ menu.actions = {
 				source: 'php/country-view.php',
 				editTarget: 'php/country-edit.php',
 				removeTarget: 'php/country-delete.php',
+				addTarget: 'php/country-add.php',
 				editable: user.power == 1 ? {
 					Name: $('<input type="text" pattern="^.*\\S.*$" title="Cannot contain only spaces.">'),
 					Abbreviation: $('<input type="text" pattern="^\\S{1,3}$" title="An Abbreviation with no more than three characters.">')
-				} : false
+				} : false,
+				add: {
+					Name: "edit",
+					Abbreviation: "edit"
+				}
 			});
 			changeTitle("Countrys");
 		},
@@ -54,6 +59,7 @@ menu.actions = {
 				source: 'php/city-view.php',
 				editTarget: 'php/city-edit.php',
 				removeTarget: 'php/city-delete.php',
+				addTarget: 'php/city-add.php',
 				editable: user.power == 1 ? {
 					Name: $('<input type="text" pattern="^.*\\S.*$" title="Cannot contain only spaces.">'),
 					Country: $('<select>').html(function(index, old) {
@@ -73,7 +79,11 @@ menu.actions = {
 							$(this).attr("value", $(this).text());
 						})
 					})
-				} : false
+				} : false,
+				add: {
+					Name: "edit",
+					Country: "edit"
+				}
 			});
 			changeTitle("Citys");
 		},
@@ -87,6 +97,7 @@ menu.actions = {
 				source: 'php/airport-view.php',
 				editTarget: 'php/airport-edit.php',
 				removeTarget: 'php/airport-delete.php',
+				addTarget: 'php/airport-add.php',
 				editable: user.power == 1 ? {
 					IATA: $('<input type="text" pattern="^[A-Z]{3}$" title="Please reference the rule of IATA">'),
 					Name: $('<input type="text" pattern="^.*\\S.*$" title="Canoot contain only spaces.">'),
@@ -120,7 +131,15 @@ menu.actions = {
 						return '<option value=""></option>' + optionStr;
 					}),
 					Country: null
-				} : false
+				} : false,
+				add: {
+					IATA: "edit",
+					Name: "edit",
+					longitude: "edit",
+					latitude: "edit",
+					Timezone: "edit",
+					City: "edit"
+				}
 			});
 			changeTitle("Airports");
 		},

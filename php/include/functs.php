@@ -98,4 +98,31 @@ function edit_entry($table_name, $primary_key, $changeable_col) {
 		));
 	}
 }
+
+function add_entry($table_name, $col_ary) {
+	$val_ary = array();
+	$q_ary = array();
+
+	foreach($col_ary as $col) {
+		if(!isset($_POST[$col]) || $_POST[$col] == "") {
+			echo json_encode(array(
+				"status" => "fail"
+			));
+			return;
+		}
+
+		$val_ary[] = $_POST[$col];
+		$q_ary[] = '?';
+	}
+
+	global $db;
+	$stat = $db->prepare("INSERT INTO $table_name (`".join('`, `', $col_ary)."`)
+				VALUES ( ".join(' , ', $q_ary)." )");
+	$stat->execute($val_ary);
+
+	echo json_encode(array(
+		"status" => $stat->rowCount() === 1 ? "success" : "fail",
+		"data" => array()
+	));
+}
 ?>

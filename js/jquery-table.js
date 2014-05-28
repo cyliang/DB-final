@@ -4,14 +4,16 @@ $.widget("custom.table", {
 		editable: false,
 		editTarget: "",
 		removeTarget: "",
+		add: {},
 
 		border: false
 	},
 	_create: function() {
 		this.ctrlSearch = new Object;
 		this.ctrlSearch.row = $('<div class="row">').appendTo(this.element);
-		this.ctrlSearch.selectCol = $('<div class="col-md-3 col-md-offset-9">').appendTo(this.ctrlSearch.row);
-		this.ctrlSearch.inputCol = $('<div class="col-md-3 col-md-push-6">').appendTo(this.ctrlSearch.row).hide();
+		this.ctrlSearch.addCol = $('<div class="col-md-3">').appendTo(this.ctrlSearch.row);
+		this.ctrlSearch.selectCol = $('<div class="col-md-3 col-md-push-6">').appendTo(this.ctrlSearch.row);
+		this.ctrlSearch.inputCol = $('<div class="col-md-3 col-md-push-3">').appendTo(this.ctrlSearch.row).hide();
 		this.ctrlSearch.select = $('<select class="form-control">')
 						.appendTo(this.ctrlSearch.selectCol)
 						.append('<option value="noselect" disabled selected>Search for</option>');
@@ -111,19 +113,72 @@ $.widget("custom.table", {
 		this.ctrlSearch.select.change(function() {
 			if((_this.ctrlSearch.col = $(this).val()) != "noselect") {
 				_this.ctrlSearch.inputCol.show();
-				_this.ctrlSearch.selectCol.removeClass("col-md-offset-9")
-							.addClass("col-md-push-6");
+				_this.ctrlSearch.selectCol.removeClass("col-md-push-6")
+							.addClass("col-md-push-3");
 				_this.ctrlSearch.input.attr("placeholder", 'Search for "' + $(this).val() + '"...');
 			} else {
 				_this.ctrlSearch.inputCol.hide();
-				_this.ctrlSearch.selectCol.addClass("col-md-offset-9")
-							.removeClass("col-md-push-6");
+				_this.ctrlSearch.selectCol.addClass("col-md-push-6")
+							.removeClass("col-md-push-3");
 			}
 		});
 		this.ctrlSearch.input.on("input", function() {
 			_this.ctrlSearch.val = $(this).val();
 			_this._refetch("first");
 		});
+
+		if(this.options.editable) {
+			$('<button class="btn btn-success" type="button">Create</button>').appendTo(this.ctrlSearch.addCol)
+			.click(function() {
+				var addModal = $('<div>').appendTo(_this.element).html(
+					'<h1>Creation</h1>' +
+					'<p>Create a new entry.</p>'
+				);
+
+				var addForm = $('<form class="form-horizontal">').appendTo(addModal);
+				for(col in _this.options.add) {
+					(_this.options.add[col] == "edit" ? 
+						_this.options.editable[col] :
+						_this.options.add[col]
+					).clone()
+					.attr("name", col)
+					.appendTo(
+						$('<div class="col-md-9">').appendTo(
+							$('<div class="form-group">').appendTo(addForm).append(
+								'<div class="col-md-3 control-label">' + col + '</div>'
+							)
+						)
+					).addClass("form-control")
+					.attr("placeholder", col)
+					.attr("required", "");
+				}
+
+				$('<div class="row">').appendTo(addForm).append(
+					$('<div class="col-md-3 col-md-push-3">').append(
+						$('<button type="button" class="btn btn-danger btn-block">Cancel</button>').click(function() {
+							$.remodal.lookup[addModal.data('remodal')].close()
+						})
+					)
+				).append(
+					$('<div class="col-md-3 col-md-push-3"><button type="submit" class="btn btn-success btn-block">OK</button></div>')
+				);
+
+				addForm.submit(function() {
+					event.preventDefault();
+
+					abPost(_this.options.addTarget, $(this).serialize(), function(data) {
+						$.remodal.lookup[addModal.data('remodal')].close();
+						_this._refetch("first");
+					});
+				});
+
+				addModal.remodal().open();
+				addModal.on('closed', function() {
+					$(this).remove();
+					$(".remodal-overlay").remove();
+				});
+			});
+		}
 	},
 	_destroy: function() {
 		this.element.empty();
