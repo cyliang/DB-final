@@ -13,7 +13,8 @@ $.widget("custom.table_airport", $.custom.table, {
 
 		var _this = this;
 		this.table.find("tbody tr").each(function() {
-			var pos = $(this).find("td").eq(3).text() + ',' + $(this).find("td").eq(2).text();
+			var modify = _this.options.editable ? 1 : 0;
+			var pos = $(this).find("td").eq(3 + modify).text() + ',' + $(this).find("td").eq(2 + modify).text();
 
 			$('<a href="#">View</a>').appendTo(
 				$("<td>").appendTo($(this))

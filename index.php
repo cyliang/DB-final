@@ -21,9 +21,8 @@ if($user = test_login()) {
 <div id="sidr">
 	<h1>Flight-managing System</h1>
 	<ul>
-		<li><a href="#">Flights</a></li>
 		<li>
-			<a href="#">Airlines</a>
+			<a href="#" data-target="flight">Flights</a>
 			<ul>
 				<li><a href="#" data-target="airport">Airports</a></li>
 				<li><a href="#" data-target="city">Citys</a></li>
@@ -76,6 +75,7 @@ var user = <?=json_encode($user)?>;
 <script src="js/lib/bootstrap.min.js"></script>
 <script src="js/jquery-table.js"></script>
 <script src="js/airport-table.js"></script>
+<script src="js/flight-table.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/abPost.js"></script>
 

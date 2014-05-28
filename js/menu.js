@@ -146,6 +146,96 @@ menu.actions = {
 		destruct: function() {
 			$("#main").table_airport("destroy");
 		}
+	},
+	flight: {
+		construct: function() {
+			$("#main").table_flight({
+				source: 'php/flight-view.php',
+				editTarget: 'php/flight-edit.php',
+				removeTarget: 'php/flight-delete.php',
+				addTarget: 'php/flight-add.php',
+				editable: user.power == 1 ? {
+					"Flight number": $('<input type="text" pattern="^\\S+$" title="Cannot contain space.">'),
+					Departure: $('<select>').html(function(index, old) {
+						var airports;
+						$.ajax({
+							dataType: 'json',
+							url: 'php/airport-all.php',
+							async: false,
+							success: function(data) {
+								airports = data;
+							}
+						});
+
+						var countryGrp = "";
+						var optionStr = "";
+						for(var ap in airports) {
+							if(airports[ap].Country != countryGrp) {
+								if(countryGrp != "") {
+									optionStr += '</optgroup>';
+								}
+								countryGrp = airports[ap].Country;
+								optionStr += '<optgroup label="' + countryGrp + '">';
+							}
+							optionStr += '<option value="' + airports[ap].IATA + '">' + airports[ap].IATA + ' (' + airports[ap].Name + ')</option>';
+						}
+
+						return '<option value=""></option>' + optionStr;
+					}),
+					dep_name: null,
+					dep_country: null,
+					dep_city: null,
+					dep_long: null,
+					dep_lat: null,
+					"Departure time": $('<input type="datetime-local">'),
+					Destination: $('<select>').html(function(index, old) {
+						var airports;
+						$.ajax({
+							dataType: 'json',
+							url: 'php/airport-all.php',
+							async: false,
+							success: function(data) {
+								airports = data;
+							}
+						});
+
+						var countryGrp = "";
+						var optionStr = "";
+						for(var ap in airports) {
+							if(airports[ap].Country != countryGrp) {
+								if(countryGrp != "") {
+									optionStr += '</optgroup>';
+								}
+								countryGrp = airports[ap].Country;
+								optionStr += '<optgroup label="' + countryGrp + '">';
+							}
+							optionStr += '<option value="' + airports[ap].IATA + '">' + airports[ap].IATA + ' (' + airports[ap].Name + ')</option>';
+						}
+
+						return '<option value=""></option>' + optionStr;
+					}),
+					des_name: null,
+					des_country: null,
+					des_city: null,
+					des_long: null,
+					des_lat: null,
+					"Arrival time": $('<input type="datetime-local">'),
+					Price: $('<input type="number" max="999999.99" min="0" step="0.01">')
+				} : false,
+				add: {
+					"Flight number": "edit",
+					Departure: "edit",
+					"Departure time": "edit",
+					Destination: "edit",
+					"Arrival time": "edit",
+					Price: "edit"
+				}
+			});
+			changeTitle("Flights");
+		},
+		destruct: function() {
+			$("#main").table_flight("destroy");
+		}
 	}
 };
 
