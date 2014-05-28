@@ -207,6 +207,9 @@ $.widget("custom.table", {
 							var colInput;
 
 							if(col in _this.options.editable) {
+								if(_this.options.editable[col] === null) {
+									continue;
+								}
 								colInput = _this.options.editable[col].clone().attr("name", col);
 							} else {
 								colInput = $('<input disabled>');

@@ -82,7 +82,42 @@ menu.actions = {
 	airport: {
 		construct: function() {
 			$("#main").table_airport({
-				source: 'php/airport-view.php'
+				source: 'php/airport-view.php',
+				editTarget: 'php/airport-edit.php',
+				editable: user.power == 1 ? {
+					IATA: $('<input type="text" pattern="^[A-Z]{3}$" title="Please reference the rule of IATA">'),
+					Name: $('<input type="text" pattern="^.*\\S.*$" title="Canoot contain only spaces.">'),
+					longitude: $('<input type="number" min="-180" max="180" step="0.000001">'),
+					latitude: $('<input type="number" min="-90" max="90" step="0.000001">'),
+					Timezone: $('<input type="text" pattern="^(+|-)[0-9]{2}:[0-9]{2}$" title="Ex. +08:00">'),
+					City: $('<select>').html(function(index, old) {
+						var citys;
+						$.ajax({
+							dataType: 'json',
+							url: 'php/city-all.php',
+							async: false,
+							success: function(data) {
+								citys = data;
+							}
+						});
+
+						var countryGrp = "";
+						var optionStr = "";
+						for(var c in citys) {
+							if(citys[c].Country != countryGrp) {
+								if(countryGrp != "") {
+									optionStr += '</optgroup>';
+								}
+								countryGrp = citys[c].Country;
+								optionStr += '<optgroup label="' + countryGrp + '">';
+							}
+							optionStr += '<option value="' + citys[c].Name + '">' + citys[c].Name + '</option>';
+						}
+
+						return '<option value=""></option>' + optionStr;
+					}),
+					Country: null
+				} : false
 			});
 			changeTitle("Airports");
 		},
