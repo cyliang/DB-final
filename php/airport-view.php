@@ -5,8 +5,8 @@ require_once 'include/functs.php';
 read_table("airport_view", array(
 	"IATA",
 	"Name",
-	"Longitude",
-	"Latitude",
+	"longitude",
+	"latitude",
 	"Timezone",
 	"City",
 	"Country"

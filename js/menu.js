@@ -36,6 +36,7 @@ menu.actions = {
 			$("#main").table({
 				source: 'php/country-view.php',
 				editTarget: 'php/country-edit.php',
+				removeTarget: 'php/country-delete.php',
 				editable: user.power == 1 ? {
 					Name: $('<input type="text" pattern="^.*\\S.*$" title="Cannot contain only spaces.">'),
 					Abbreviation: $('<input type="text" pattern="^\\S{1,3}$" title="An Abbreviation with no more than three characters.">')
@@ -52,6 +53,7 @@ menu.actions = {
 			$("#main").table({
 				source: 'php/city-view.php',
 				editTarget: 'php/city-edit.php',
+				removeTarget: 'php/city-delete.php',
 				editable: user.power == 1 ? {
 					Name: $('<input type="text" pattern="^.*\\S.*$" title="Cannot contain only spaces.">'),
 					Country: $('<select>').html(function(index, old) {
@@ -84,12 +86,13 @@ menu.actions = {
 			$("#main").table_airport({
 				source: 'php/airport-view.php',
 				editTarget: 'php/airport-edit.php',
+				removeTarget: 'php/airport-delete.php',
 				editable: user.power == 1 ? {
 					IATA: $('<input type="text" pattern="^[A-Z]{3}$" title="Please reference the rule of IATA">'),
 					Name: $('<input type="text" pattern="^.*\\S.*$" title="Canoot contain only spaces.">'),
 					longitude: $('<input type="number" min="-180" max="180" step="0.000001">'),
 					latitude: $('<input type="number" min="-90" max="90" step="0.000001">'),
-					Timezone: $('<input type="text" pattern="^(+|-)[0-9]{2}:[0-9]{2}$" title="Ex. +08:00">'),
+					Timezone: $('<input type="text" pattern="^(\\+|-)[0-9]{2}:[0-9]{2}$" title="Ex. +08:00">'),
 					City: $('<select>').html(function(index, old) {
 						var citys;
 						$.ajax({

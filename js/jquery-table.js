@@ -2,6 +2,8 @@ $.widget("custom.table", {
 	options: {
 		source: "",
 		editable: false,
+		editTarget: "",
+		removeTarget: "",
 
 		border: false
 	},
@@ -168,7 +170,7 @@ $.widget("custom.table", {
 	},
 	_sort: function(col) {
 		if(this.ctrlOrder.col != null) {
-			this.column[this.ctrlOrder.col].text(col + " ");
+			this.column[this.ctrlOrder.col].text(this.ctrlOrder.col + " ");
 		}
 
 		if(col == this.ctrlOrder.col) {
@@ -275,7 +277,7 @@ $.widget("custom.table", {
 
 						deleteModal.remodal().open();
 						deleteModal.on('cancel', function() {
-							abPost('php/country-delete.php', {
+							abPost(_this.options.removeTarget, {
 								key: rowData[_this.data.primary]
 							}, function(data) {
 								_this._refetch("now");
