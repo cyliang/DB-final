@@ -13,12 +13,12 @@ function test_login() {
 	return $stat->fetchObject();
 }
 
-function read_table($table_name, $col_ary, $primary_key) {
+function read_table($table_name, $col_ary, $primary_key, $default_orderby = null) {
 	global $db;
 
 	$order_str = isset($_POST['order_col'], $_POST['order_ord']) && in_array($_POST['order_col'], $col_ary) ? 
-		"ORDER BY `{$_POST['order_col']}` ".($_POST['order_ord'] == "ASC" ? "ASC" : "DESC") :
-		"";
+		"ORDER BY `{$_POST['order_col']}` ".($_POST['order_ord'] == "ASC" ? "ASC" : "DESC").($default_orderby === null ? "" : ", `$default_orderby`") :
+		($default_orderby === null ? "" : "ORDER BY `$default_orderby`");
 
 	$search_str = isset($_POST['search_col'], $_POST['search_val']) && in_array($_POST['search_col'], $col_ary) ?
 		"WHERE `{$_POST['search_col']}` LIKE :search" :

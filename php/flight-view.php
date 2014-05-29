@@ -23,5 +23,5 @@ read_table("flight_view", array(
 	"Arrival time",
 	"Flight time",
 	"Price"
-), "id");
+), "id", "Flight number");
 ?>
