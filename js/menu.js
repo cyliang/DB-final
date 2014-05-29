@@ -326,6 +326,18 @@ menu.actions = {
 		destruct: function() {
 			$("#main").empty();
 		}
+	},
+	user: {
+		construct: function() {
+			$("#main").table_user({
+				source: "php/user-view.php",
+				editable: {"id": null},
+				editTarget: "php/user-upgrade.php"
+			});
+		},
+		destruct: function() {
+			$("#main").table_user("destroy");
+		}
 	}
 };
 

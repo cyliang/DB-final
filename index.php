@@ -30,7 +30,7 @@ if($user = test_login()) {
 			</ul>
 		</li>
 	<?php if($user->power == 1) { ?>
-		<li><a href="#">Users management</a></li>
+		<li><a href="#" data-target="user">Users management</a></li>
 	<?php } ?>
 		<li>
 			<a>Account management</a>
@@ -76,6 +76,7 @@ var user = <?=json_encode($user)?>;
 <script src="js/jquery-table.js"></script>
 <script src="js/airport-table.js"></script>
 <script src="js/flight-table.js"></script>
+<script src="js/user-table.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/abPost.js"></script>
 

@@ -247,69 +247,74 @@ $.widget("custom.table", {
 			var tr = $("<tr>").appendTo(tbody);
 
 			if(this.options.editable !== false) {
-				$("<td>").appendTo(tr).append(
-					$('<a href="#"></a>')
-					.append('<span class="glyphicon glyphicon-pencil text-warning"></span>')
-					.attr("data-target", row)
-					.click(function() {
-						var rowData = _this.data.data[$(this).attr("data-target")];
+				var modifyCol = $("<td>").appendTo(tr);
+				if(!$.isEmptyObject(this.options.editable)) {
+					modifyCol.append(
+						$('<a href="#"></a>')
+						.append('<span class="glyphicon glyphicon-pencil text-warning"></span>')
+						.attr("data-target", row)
+						.click(function() {
+							var rowData = _this.data.data[$(this).attr("data-target")];
 
-						var editModal = $('<div>').appendTo(_this.element).html(
-							'<h1 class="text-warning">Modification</h1>' +
-							'<p>Leave blank for not changing</p>'
-						);
+							var editModal = $('<div>').appendTo(_this.element).html(
+								'<h1 class="text-warning">Modification</h1>' +
+								'<p>Leave blank for not changing</p>'
+							);
 
-						var editForm = $('<form class="form-horizontal">').appendTo(editModal);
-						for(var col in rowData) {
-							var colInput;
+							var editForm = $('<form class="form-horizontal">').appendTo(editModal);
+							for(var col in rowData) {
+								var colInput;
 
-							if(col in _this.options.editable) {
-								if(_this.options.editable[col] === null) {
-									continue;
+								if(col in _this.options.editable) {
+									if(_this.options.editable[col] === null) {
+										continue;
+									}
+									colInput = _this.options.editable[col].clone().attr("name", col);
+								} else {
+									colInput = $('<input disabled>');
 								}
-								colInput = _this.options.editable[col].clone().attr("name", col);
-							} else {
-								colInput = $('<input disabled>');
-							}
 
-							colInput.appendTo(
-								$('<div class="col-md-9">').appendTo(
-									$('<div class="form-group">').appendTo(editForm).append(
-										'<div class="col-md-3 control-label">' + col + '</div>'
+								colInput.appendTo(
+									$('<div class="col-md-9">').appendTo(
+										$('<div class="form-group">').appendTo(editForm).append(
+											'<div class="col-md-3 control-label">' + col + '</div>'
+										)
 									)
+								).addClass("form-control")
+								.attr("placeholder", rowData[col]);
+
+							}
+							$('<input type="hidden" name="key">').appendTo(editForm)
+											.val(rowData[_this.data.primary]);
+
+							$('<div class="row">').appendTo(editForm).append(
+								$('<div class="col-md-3 col-md-push-3">').append(
+									$('<button type="button" class="btn btn-danger btn-block">Cancel</button>').click(function() {
+										$.remodal.lookup[editModal.data('remodal')].close()
+									})
 								)
-							).addClass("form-control")
-							.attr("placeholder", rowData[col]);
+							).append(
+								$('<div class="col-md-3 col-md-push-3"><button type="submit" class="btn btn-success btn-block">OK</button></div>')
+							);
+							editForm.submit(function() {
+								event.preventDefault();
 
-						}
-						$('<input type="hidden" name="key">').appendTo(editForm)
-										.val(rowData[_this.data.primary]);
-
-						$('<div class="row">').appendTo(editForm).append(
-							$('<div class="col-md-3 col-md-push-3">').append(
-								$('<button type="button" class="btn btn-danger btn-block">Cancel</button>').click(function() {
-									$.remodal.lookup[editModal.data('remodal')].close()
-								})
-							)
-						).append(
-							$('<div class="col-md-3 col-md-push-3"><button type="submit" class="btn btn-success btn-block">OK</button></div>')
-						);
-						editForm.submit(function() {
-							event.preventDefault();
-
-							abPost(_this.options.editTarget, $(this).serialize(), function(data) {
-								$.remodal.lookup[editModal.data('remodal')].close();
-								_this._refetch("now");
+								abPost(_this.options.editTarget, $(this).serialize(), function(data) {
+									$.remodal.lookup[editModal.data('remodal')].close();
+									_this._refetch("now");
+								});
 							});
-						});
 
-						editModal.remodal().open();
-						editModal.on('closed', function() {
-							$(this).remove();
-							$(".remodal-overlay").remove();
-						});
-					})
-				).append(
+							editModal.remodal().open();
+							editModal.on('closed', function() {
+								$(this).remove();
+								$(".remodal-overlay").remove();
+							});
+						})
+					);
+				}
+
+				modifyCol.append(
 					$('<a href="#"></a>')
 					.append('<span class="glyphicon glyphicon-trash text-danger"></span>')
 					.attr("data-target", row)
