@@ -272,7 +272,7 @@ menu.actions = {
 						$('<div class="col-md-3 control-label">').text('email:')
 					).append(
 						$('<div class="col-md-9">').append(
-							$('<input type="email" name="email" class="form-control">')
+							$('<input class="form-control" disabled>')
 							.attr("placeholder", data.email)
 						)
 					)
@@ -287,19 +287,10 @@ menu.actions = {
 					)
 				).append(
 					$('<div class="form-group">').append(
-						$('<div class="col-md-3 control-label">').text('Old password:')
-					).append(
-						$('<div class="col-md-9">').append(
-							$('<input type="password" name="oldpassword" class="form-control">')
-							.attr("placeholder", "Enter old password to confirm.")
-						)
-					)
-				).append(
-					$('<div class="form-group">').append(
 						$('<div class="col-md-3 control-label">').text('New password:')
 					).append(
 						$('<div class="col-md-9">').append(
-							$('<input type="password" name="newpassword" class="form-control">')
+							$('<input type="password" name="password" class="form-control">')
 							.attr("placeholder", "Enter new password to change.")
 						)
 					)
@@ -316,6 +307,19 @@ menu.actions = {
 					'<div class="text-right"><button type="submit" class="btn btn-warning">Update profile</button></div>'
 				).submit(function() {
 					event.preventDefault();
+
+					if($(this).find('[name="vpassword"]').val() == $(this).find('[name="password"]').val()) {
+						abPost('php/user-editself.php', $(this).serialize(), function(data) {
+							alert("Profile has been updated. Reloading...");
+							location.reload();
+						});
+					} else {
+						$(this).find('[name="vpassword"]').popover("show");
+					}
+				}).find('[name="vpassword"]').popover({
+					trigger: "manual",
+					content: "The password is different with the verifying password",
+					placement: "bottom"
 				});
 			});
 		},
