@@ -332,7 +332,34 @@ menu.actions = {
 			$("#main").table_user({
 				source: "php/user-view.php",
 				editable: {"id": null},
-				editTarget: "php/user-upgrade.php"
+				editTarget: "php/user-upgrade.php",
+				removeTarget: "php/user-delete.php",
+				addTarget: "php/user-add.php",
+				add: {
+					email: $('<input type="email">').change(function() {
+						var _this = this;
+
+						$.post("php/user-check_exist.php", {
+							email: $(this).val()
+						}, function(data, status) {
+							if(status == "success") {
+								if(data.status == 'exist') {
+									$(_this).popover({
+										trigger: "manual",
+										html: true,
+										content: '<span class="text-danger">This&nbsp;email&nbsp;has&nbsp;been&nbsp;used!</span>',
+										container: $(_this).parent().parent()
+									}).popover("show");
+								} else {
+									$(_this).popover("destroy");
+								}
+							}
+						}, 'json');
+					}),
+					Name: $('<input type="text">'),
+					password: $('<input type="text">'),
+					power: $('<select><option value="0">User</option><option value="1">Administrator</option></select>')
+				}
 			});
 		},
 		destruct: function() {

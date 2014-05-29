@@ -140,7 +140,7 @@ $.widget("custom.table", {
 					(_this.options.add[col] == "edit" ? 
 						_this.options.editable[col] :
 						_this.options.add[col]
-					).clone()
+					).clone(true)
 					.attr("name", col)
 					.appendTo(
 						$('<div class="col-md-9">').appendTo(
@@ -269,7 +269,7 @@ $.widget("custom.table", {
 									if(_this.options.editable[col] === null) {
 										continue;
 									}
-									colInput = _this.options.editable[col].clone().attr("name", col);
+									colInput = _this.options.editable[col].clone(true).attr("name", col);
 								} else {
 									colInput = $('<input disabled>');
 								}
