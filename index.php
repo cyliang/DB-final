@@ -35,7 +35,7 @@ if($user = test_login()) {
 		<li>
 			<a>Account management</a>
 			<ul>
-				<li><a href="#">Profile setting</a></li>
+				<li><a href="#" data-target="profile">Profile setting</a></li>
 			<?php if($user->power != 1) { ?>	
 				<li><a href="#">Account upgrading</a></li>
 			<?php } ?>

@@ -182,11 +182,12 @@ menu.actions = {
 
 						return '<option value=""></option>' + optionStr;
 					}),
-					dep_name: null,
-					dep_country: null,
-					dep_city: null,
-					dep_long: null,
-					dep_lat: null,
+					"Departure name": null,
+					"Departure country": null,
+					"Departure city": null,
+					"Departure timezone": null,
+					"Departure longitude": null,
+					"Departure latitude": null,
 					"Departure time": $('<input type="datetime-local">'),
 					Destination: $('<select>').html(function(index, old) {
 						var airports;
@@ -214,12 +215,14 @@ menu.actions = {
 
 						return '<option value=""></option>' + optionStr;
 					}),
-					des_name: null,
-					des_country: null,
-					des_city: null,
-					des_long: null,
-					des_lat: null,
+					"Destination name": null,
+					"Destination country": null,
+					"Destination city": null,
+					"Destination timezone": null,
+					"Destination longitude": null,
+					"Destination latitude": null,
 					"Arrival time": $('<input type="datetime-local">'),
+					"Flight time": null,
 					Price: $('<input type="number" max="999999.99" min="0" step="0.01">')
 				} : false,
 				add: {
@@ -235,6 +238,89 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").table_flight("destroy");
+		}
+	},
+	profile: {
+		construct: function() {
+			changeTitle("User profile");
+			var panel = $('<div class="panel panel-info">').appendTo("#main")
+				.html('<div class="panel-heading">Leave blank for not changing</div>');
+
+			abPost('php/user-viewself.php', {}, function(data) {
+				$('<form class="form-horizontal">').appendTo(
+					$('<div class="panel-body">').appendTo(panel)
+				).append(
+					$('<div class="form-group">').append(
+						$('<div class="col-md-3 control-label">').text('id:')
+					).append(
+						$('<div class="col-md-9">').append(
+							$('<input class="form-control" disabled>')
+							.attr("placeholder", data.id)
+						)
+					)
+				).append(
+					$('<div class="form-group">').append(
+						$('<div class="col-md-3 control-label">').text('Name:')
+					).append(
+						$('<div class="col-md-9">').append(
+							$('<input type="text" name="Name" class="form-control">')
+							.attr("placeholder", data.Name)
+						)
+					)
+				).append(
+					$('<div class="form-group">').append(
+						$('<div class="col-md-3 control-label">').text('email:')
+					).append(
+						$('<div class="col-md-9">').append(
+							$('<input type="email" name="email" class="form-control">')
+							.attr("placeholder", data.email)
+						)
+					)
+				).append(
+					$('<div class="form-group">').append(
+						$('<div class="col-md-3 control-label">').text('Identity:')
+					).append(
+						$('<div class="col-md-9">').append(
+							$('<input class="form-control" disabled>')
+							.attr("placeholder", data.power == 1 ? "Administrator" : "User")
+						)
+					)
+				).append(
+					$('<div class="form-group">').append(
+						$('<div class="col-md-3 control-label">').text('Old password:')
+					).append(
+						$('<div class="col-md-9">').append(
+							$('<input type="password" name="oldpassword" class="form-control">')
+							.attr("placeholder", "Enter old password to confirm.")
+						)
+					)
+				).append(
+					$('<div class="form-group">').append(
+						$('<div class="col-md-3 control-label">').text('New password:')
+					).append(
+						$('<div class="col-md-9">').append(
+							$('<input type="password" name="newpassword" class="form-control">')
+							.attr("placeholder", "Enter new password to change.")
+						)
+					)
+				).append(
+					$('<div class="form-group">').append(
+						$('<div class="col-md-3 control-label">').text('Verifying password:')
+					).append(
+						$('<div class="col-md-9">').append(
+							$('<input type="password" name="vpassword" class="form-control">')
+							.attr("placeholder", "Enter the password same as the new one.")
+						)
+					)
+				).append(
+					'<div class="text-right"><button type="submit" class="btn btn-warning">Update profile</button></div>'
+				).submit(function() {
+					event.preventDefault();
+				});
+			});
+		},
+		destruct: function() {
+			$("#main").empty();
 		}
 	}
 };

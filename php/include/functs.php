@@ -17,11 +17,11 @@ function read_table($table_name, $col_ary, $primary_key) {
 	global $db;
 
 	$order_str = isset($_POST['order_col'], $_POST['order_ord']) && in_array($_POST['order_col'], $col_ary) ? 
-		"ORDER BY {$_POST['order_col']} ".($_POST['order_ord'] == "ASC" ? "ASC" : "DESC") :
+		"ORDER BY `{$_POST['order_col']}` ".($_POST['order_ord'] == "ASC" ? "ASC" : "DESC") :
 		"";
 
 	$search_str = isset($_POST['search_col'], $_POST['search_val']) && in_array($_POST['search_col'], $col_ary) ?
-		"WHERE {$_POST['search_col']} LIKE :search" :
+		"WHERE `{$_POST['search_col']}` LIKE :search" :
 		"";
 
 	$col_str = join("`, `", $col_ary);
