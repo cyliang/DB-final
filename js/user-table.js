@@ -9,7 +9,7 @@ $.widget("custom.table_user", $.custom.table, {
 
 			var idenCol = $(this).find("td").last();
 			if(idenCol.text() == "User") {
-				$('<button type="button" class="btn btn-warning">Upgrade</button>').appendTo(idenCol).click(function() {
+				$('<button type="button" class="btn btn-warning btn-xs">Upgrade</button>').appendTo(idenCol.append("&nbsp;")).click(function() {
 					var upgradeModal = $('<div>').appendTo(_this.element).html(
 						'<h1 class="text-warning">User Upgrading</h1>' +
 						'<p>The following user would become an <strong>administrator</strong>,<br>' +
@@ -23,13 +23,14 @@ $.widget("custom.table_user", $.custom.table, {
 					var desr = upgradeModal.find("dl");
 					for(var col in rowData) {
 						$("<dt>").appendTo(desr).text(col);
-						$("<dd>").appendTo(desr .text(rowData[col]);
+						$("<dd>").appendTo(desr).text(rowData[col]);
 					}
 
 					upgradeModal.remodal().open();
 					upgradeModal.on('confirm', function() {
 						abPost(_this.options.editTarget, {
-							key: rowData[_this.data.primary]
+							key: rowData[_this.data.primary],
+							power: 1
 						}, function(data) {
 							_this._refetch("now");
 						});
