@@ -108,16 +108,26 @@ $.widget("custom.ticket", {
 		).submit(function() {
 			event.preventDefault();
 
-			_this.searchModal.append(_this.searchForm)
-					.appendTo(_this.element)
-					.remodal();
-			_this.searchPanel.remove();
+			if(_this.inTbl) {
+				_this.tbl.table_ticket("destroy");
+			} else {
+				_this.searchModal.append(_this.searchForm)
+						.appendTo(_this.element)
+						.remodal();
+				_this.searchPanel.remove();
+				$('<button type="button" class="btn btn-warning">Search for another tickets</button>').appendTo(
+					$('<div class="col-md-12 text-right">').appendTo(
+						$('<div class="row">').prependTo(_this.element)
+					)
+				);
+			}
 			_this.tbl.table_ticket({
 				source: 'php/ticket-view.php?' + $(this).serialize()
 			});
 		});
 
 		this.tbl = $('<div>').appendTo(this.element);
+		this.inTbl = false;
 
 		this.searchModal = $('<div>').html(
 			'<h1>Search for tickets...</h1>' +
