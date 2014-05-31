@@ -207,7 +207,87 @@ $.widget("custom.table_ticket", $.custom.table, {
 		track: false
 	}, 
 	_create: function() {
+		this.removeTh = false;
 		this._super();
-		this.ctrlSearch.row.remove();
+	},
+	_refresh: function() {
+		if(!this.removeTh) {
+			this.ctrlSearch.row
+			.add(this.column['f1_number'])
+			.add(this.column['f2_number'])
+			.add(this.column['f3_number'])
+
+			.add(this.column['Departure name'])
+			.add(this.column['Departure country'])
+			.add(this.column['Departure city'])
+			.add(this.column['Departure timezone'])
+			.add(this.column['Departure longitude'])
+			.add(this.column['Departure latitude'])
+
+			.add(this.column['Destination name'])
+			.add(this.column['Destination country'])
+			.add(this.column['Destination city'])
+			.add(this.column['Destination timezone'])
+			.add(this.column['Destination longitude'])
+			.add(this.column['Destination latitude'])
+
+			.add(this.column['t1'])
+			.add(this.column['t1_name'])
+			.add(this.column['t1_country'])
+			.add(this.column['t1_city'])
+			.add(this.column['t1_timezone'])
+			.add(this.column['t1_longitude'])
+			.add(this.column['t1_latitude'])
+
+			.add(this.column['t2'])
+			.add(this.column['t2_name'])
+			.add(this.column['t2_country'])
+			.add(this.column['t2_city'])
+			.add(this.column['t2_timezone'])
+			.add(this.column['t2_longitude'])
+			.add(this.column['t2_latitude'])
+
+			.add(this.column['f1_arrival_time'])
+			.add(this.column['f2_departure_time'])
+			.add(this.column['f2_arrival_time'])
+			.add(this.column['f3_departure_time'])
+
+			.add(this.column['f1_flight_time'])
+			.add(this.column['f2_flight_time'])
+			.add(this.column['f3_flight_time'])
+			.remove();
+
+			this.column.Detail = $("<th>Detail</th>").appendTo(this.table.find("thead tr"));
+
+			this.removeTh = true;
+		}
+		this._super();
+		var tbody = this.table.find("tbody").empty();
+
+		for(var row in this.data.data) {
+			var tr = $("<tr>").appendTo(tbody);
+			var data = this.data.data[row];
+
+			/* Departure */
+			$("<td>").text(data['Departure']).appendTo(tr);
+
+			/* Departure */
+			$("<td>").text(data['Destination']).appendTo(tr);
+
+			/* Others */
+			$("<td>").text(data['Departure time']).appendTo(tr);
+			$("<td>").text(data['Arrival time']).appendTo(tr);
+			$("<td>").text(data['Transfer time']).appendTo(tr);
+			$("<td>").text(data['Total flying time']).appendTo(tr);
+			$("<td>").text(data['Total transferring time']).appendTo(tr);
+			$("<td>").text(data['Overnight']).appendTo(tr);
+			$("<td>").text(data['Price']).appendTo(tr);
+
+			/* Detail */
+			$('<a href="#">Detail</a>').appendTo(
+				$("<td>").appendTo(tr)
+			).click(function() {
+			});
+		}
 	}
 });

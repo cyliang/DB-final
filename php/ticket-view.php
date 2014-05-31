@@ -2,12 +2,6 @@
 require_once 'include/db.php';
 
 $col_ary = array(
-	"Transfer time",
-
-	"f1_number",
-	"f2_number",
-	"f3_number",
-
 	"Departure",
 	"Departure name",
 	"Departure country",
@@ -26,10 +20,15 @@ $col_ary = array(
 	
 	"Departure time",
 	"Arrival time",
+	"Transfer time",
 	"Total flying time",
 	"Total transferring time",
 	"Overnight",
 	"Price",
+
+	"f1_number",
+	"f2_number",
+	"f3_number",
 
 	"t1",
 	"t1_name",
