@@ -1,7 +1,7 @@
 <?php
-require_once 'include/functs.php';
+require_once 'include/db.php';
 
-read_table("ticket_view", array(
+$col_ary = array(
 	"Transfer time",
 
 	"f1_number",
@@ -55,5 +55,91 @@ read_table("ticket_view", array(
 	"f1_flight_time",
 	"f2_flight_time",
 	"f3_flight_time"
-), "");
+);
+
+$search_col = array();
+$search_val = array();
+
+if(isset($_POST['dep_type'], $_POST['dep']) && $_POST['dep_type'] != 'all') {
+	$search_val[':dep'] = $_POST['dep'];
+	switch($_POST['dep_type']) {
+	case 'country':
+		$search_col[] = '`Departure country` = :dep';
+		break;
+	case 'city':
+		$search_col[] = '`Departure city` = :dep';
+		break;
+	case 'airport':
+		$search_col[] = '`Departure` = :dep';
+		break;
+	default:
+		unset($search_val[':dep']);
+	}
+}
+
+if(isset($_POST['des_type'], $_POST['des']) && $_POST['des_type'] != 'all') {
+	$search_val[':des'] = $_POST['des'];
+	switch($_POST['des_type']) {
+	case 'country':
+		$search_col[] = '`Destination country` = :des';
+		break;
+	case 'city':
+		$search_col[] = '`Destination city` = :des';
+		break;
+	case 'airport':
+		$search_col[] = '`Destination` = :des';
+		break;
+	default:
+		unset($search_val[':des']);
+	}
+}
+
+if(isset($_POST['date_type']) && $_POST['date_type'] != 'all') {
+	$search_val[':date'] = $_POST['date'];
+	switch($_POST['date_type']) {
+	case 'dep':
+		$search_col[] = '`Departure time` >= :date';
+		break;
+	case 'ari':
+		$search_col[] = '`Arrival time` <= :date';
+		break;
+	default:
+		unset($search_val[':date']);
+	}
+}
+
+$search_str = count($search_col) > 0 ? "WHERE ".join(" AND ", $search_col) : "";
+
+
+
+$order_str = isset($_POST['order_col'], $_POST['order_ord']) && in_array($_POST['order_col'], $col_ary) ? 
+	"ORDER BY `{$_POST['order_col']}` ".($_POST['order_ord'] == "ASC" ? "ASC" : "DESC") :
+	"";
+
+$col_str = join("`, `", $col_ary);
+
+$stat = $db->prepare("SELECT `$col_str` FROM `ticket_view` $search_str $order_str LIMIT :page, 10");
+$stat2 = $db->prepare("SELECT COUNT(*) FROM `ticket_view` $search_str");
+$stat->bindValue(
+	':page',
+	isset($_POST['page']) && filter_var($_POST['page'], FILTER_VALIDATE_INT) ? ($_POST['page'] - 1) * 10 : 0,
+	PDO::PARAM_INT
+);
+
+foreach($search_val as $col => $val) {
+	$stat->bindValue($col, $val);
+	$stat2->bindValue($col, $val);
+}
+
+$stat->execute();
+$stat2->execute();
+
+echo json_encode(array(
+	"status" => "success",
+	"data" => array(
+		"data" => $stat->fetchAll(PDO::FETCH_ASSOC),
+		"totalPage" => ceil($stat2->fetchColumn() / 10)
+	)
+));
+
 ?>
