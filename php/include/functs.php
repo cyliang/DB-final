@@ -38,7 +38,11 @@ function read_table($table_name, $col_ary, $primary_key, $default_orderby = null
 
 	$stat->execute();
 
-	$stat2 = $db->query("SELECT COUNT(*) FROM `$table_name`");
+	$stat2 = $db->prepare("SELECT COUNT(*) FROM `$table_name` $search_str");
+	if($search_str != "") {
+		$stat2->bindValue(':search', "%{$_POST['search_val']}%");
+	}
+	$stat2->execute();
 
 	echo json_encode(array(
 		"status" => "success",
