@@ -28,26 +28,14 @@ $.widget("custom.table_flight", $.custom.table, {
 
 			$(this).find("td").eq(2 + modify)
 			.add($(this).find("td").eq(10 + modify)).each(function() {
-				var pos = $(this).next().next().next().next().next().next().text() + ',' + 
-					$(this).next().next().next().next().next().text();
-					
-				$(this).html(
-					$('<a href="#">').text($(this).text())
-					.popover({
-						html: true,
-						placement: "bottom",
-						trigger: "hover",
-						title: $(this).html() + ' (' + $(this).next().html() + ')',
-						content: 
-							'<p><strong>Country:</strong> ' + $(this).next().next().html() + '<br>' +
-							'<strong>City:</strong> ' + $(this).next().next().next().html() + '<br>' + 
-							'<strong>Timezone:</strong> ' + $(this).next().next().next().next().html() + '</p>' +
-							'<img src="' + 
-								"http://maps.googleapis.com/maps/api/staticmap?center=" + pos +
-								"&zoom=12&size=244x200&sensor=false&markers=%7C" + pos +
-							'">'
-					})
-				);
+				$(this).airport({
+					name: $(this).next().html(),
+					country: $(this).next().next().html(),
+					city: $(this).next().next().next().html(),
+					timezone: $(this).next().next().next().next().html(),
+					longitude: $(this).next().next().next().next().next().text(),
+					latitude: $(this).next().next().next().next().next().next().text()
+				});
 
 				$(this).next()
 				.add($(this).next().next())

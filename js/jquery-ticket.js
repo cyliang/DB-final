@@ -110,22 +110,29 @@ $.widget("custom.ticket", {
 
 			if(_this.inTbl) {
 				_this.tbl.table_ticket("destroy");
+				sModal.close();
 			} else {
+				_this.inTbl = true;
 				_this.searchModal.append(_this.searchForm)
 						.appendTo(_this.element)
 						.remodal();
+				sModal = $.remodal.lookup[_this.searchModal.data('remodal')];
 				_this.searchPanel.remove();
+
 				$('<button type="button" class="btn btn-warning">Search for another tickets</button>').appendTo(
 					$('<div class="col-md-12 text-right">').appendTo(
 						$('<div class="row">').prependTo(_this.element)
 					)
-				);
+				).click(function() {
+					sModal.open();
+				});
 			}
 			_this.tbl.table_ticket({
 				source: 'php/ticket-view.php?' + $(this).serialize()
 			});
 		});
 
+		var sModal;
 		this.tbl = $('<div>').appendTo(this.element);
 		this.inTbl = false;
 
@@ -280,10 +287,24 @@ $.widget("custom.table_ticket", $.custom.table, {
 			var data = this.data.data[row];
 
 			/* Departure */
-			$("<td>").text(data['Departure']).appendTo(tr);
+			$("<td>").text(data['Departure']).appendTo(tr).airport({
+				name: data['Departure name'],
+				country: data['Departure country'],
+				city: data['Departure city'],
+				timezone: data['Departure timezone'],
+				longitude: data['Departure longitude'],
+				latitude: data['Departure latitude']
+			});
 
 			/* Departure */
-			$("<td>").text(data['Destination']).appendTo(tr);
+			$("<td>").text(data['Destination']).appendTo(tr).airport({
+				name: data['Destination name'],
+				country: data['Destination country'],
+				city: data['Destination city'],
+				timezone: data['Destination timezone'],
+				longitude: data['Destination longitude'],
+				latitude: data['Destination latitude']
+			});
 
 			/* Others */
 			$("<td>").text(data['Departure time']).appendTo(tr);
@@ -328,12 +349,37 @@ $.widget("custom.table_ticket", $.custom.table, {
 			).append(
 				$('<td>').text(data['f1_number'])
 			).append(
-				$('<td>').text(data['Departure'])
+				$('<td>').text(data['Departure']).airport({
+					name: data['Departure name'],
+					country: data['Departure country'],
+					city: data['Departure city'],
+					timezone: data['Departure timezone'],
+					longitude: data['Departure longitude'],
+					latitude: data['Departure latitude']
+				})
 			).append(
 				$('<td>').text(data['Departure time'])
-			).append(
-				$('<td>').text(data['Transfer time'] == 0 ? data['Destination'] : data['t1'])
-			).append(
+			).append(function() {
+				if(data['Transfer time'] == 0) {
+					return $('<td>').text(data['Destination']).airport({
+						name: data['Destination name'],
+						country: data['Destination country'],
+						city: data['Destination city'],
+						timezone: data['Destination timezone'],
+						longitude: data['Destination longitude'],
+						latitude: data['Destination latitude']
+					});
+				} else {
+					return $('<td>').text(data['t1']).airport({
+						name: data['t1_name'],
+						country: data['t1_country'],
+						city: data['t1_city'],
+						timezone: data['t1_timezone'],
+						longitude: data['t1_longitude'],
+						latitude: data['t1_latitude']
+					});
+				}
+			}).append(
 				$('<td>').text(data['Transfer time'] == 0 ? data['Arrival time'] : data['f1_arrival_time'])
 			).append(
 				$('<td>').text(data['f1_flight_time'])
@@ -346,12 +392,37 @@ $.widget("custom.table_ticket", $.custom.table, {
 				).append(
 					$('<td>').text(data['f2_number'])
 				).append(
-					$('<td>').text(data['t1'])
+					$('<td>').text(data['t1']).airport({
+						name: data['t1_name'],
+						country: data['t1_country'],
+						city: data['t1_city'],
+						timezone: data['t1_timezone'],
+						longitude: data['t1_longitude'],
+						latitude: data['t1_latitude']
+					})
 				).append(
 					$('<td>').text(data['f2_departure_time'])
-				).append(
-					$('<td>').text(data['Transfer time'] == 1 ? data['Destination'] : data['t2'])
-				).append(
+				).append(function() {
+					if(data['Transfer time'] == 1) {
+						return $('<td>').text(data['Destination']).airport({
+							name: data['Destination name'],
+							country: data['Destination country'],
+							city: data['Destination city'],
+							timezone: data['Destination timezone'],
+							longitude: data['Destination longitude'],
+							latitude: data['Destination latitude']
+						});
+					} else {
+						return $('<td>').text(data['t2']).airport({
+							name: data['t2_name'],
+							country: data['t2_country'],
+							city: data['t2_city'],
+							timezone: data['t2_timezone'],
+							longitude: data['t2_longitude'],
+							latitude: data['t2_latitude']
+						});
+					}
+				}).append(
 					$('<td>').text(data['Transfer time'] == 1 ? data['Arrival time'] : data['f2_arrival_time'])
 				).append(
 					$('<td>').text(data['f2_flight_time'])
@@ -365,11 +436,25 @@ $.widget("custom.table_ticket", $.custom.table, {
 				).append(
 					$('<td>').text(data['f3_number'])
 				).append(
-					$('<td>').text(data['t2'])
+					$('<td>').text(data['t2']).airport({
+						name: data['t2_name'],
+						country: data['t2_country'],
+						city: data['t2_city'],
+						timezone: data['t2_timezone'],
+						longitude: data['t2_longitude'],
+						latitude: data['t2_latitude']
+					})
 				).append(
 					$('<td>').text(data['f3_departure_time'])
 				).append(
-					$('<td>').text(data['Destination'])
+					$('<td>').text(data['Destination']).airport({
+						name: data['Destination name'],
+						country: data['Destination country'],
+						city: data['Destination city'],
+						timezone: data['Destination timezone'],
+						longitude: data['Destination longitude'],
+						latitude: data['Destination latitude']
+					})
 				).append(
 					$('<td>').text(data['Arrival time'])
 				).append(

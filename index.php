@@ -75,6 +75,7 @@ var user = <?=json_encode($user)?>;
 <script src="js/lib/bootstrap.min.js"></script>
 <script src="js/jquery-table.js"></script>
 <script src="js/jquery-ticket.js"></script>
+<script src="js/jquery-airport.js"></script>
 <script src="js/airport-table.js"></script>
 <script src="js/flight-table.js"></script>
 <script src="js/user-table.js"></script>
