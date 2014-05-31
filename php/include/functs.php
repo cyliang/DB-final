@@ -31,17 +31,14 @@ function read_table($table_name, $col_ary, $primary_key, $default_orderby = null
 		isset($_POST['page']) && filter_var($_POST['page'], FILTER_VALIDATE_INT) ? ($_POST['page'] - 1) * 10 : 0,
 		PDO::PARAM_INT
 	);
+	$stat2 = $db->prepare("SELECT COUNT(*) FROM `$table_name` $search_str");
 
 	if($search_str != "") {
 		$stat->bindValue(':search', "%{$_POST['search_val']}%");
+		$stat2->bindValue(':search', "%{$_POST['search_val']}%");
 	}
 
 	$stat->execute();
-
-	$stat2 = $db->prepare("SELECT COUNT(*) FROM `$table_name` $search_str");
-	if($search_str != "") {
-		$stat2->bindValue(':search', "%{$_POST['search_val']}%");
-	}
 	$stat2->execute();
 
 	echo json_encode(array(
