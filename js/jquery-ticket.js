@@ -258,6 +258,7 @@ $.widget("custom.table_ticket", $.custom.table, {
 			.remove();
 
 			this.column.Detail = $("<th>Detail</th>").appendTo(this.table.find("thead tr"));
+			this.table.removeClass("table-striped table-hover");//.addClass("table-bordered");
 
 			this.removeTh = true;
 		}
@@ -287,7 +288,84 @@ $.widget("custom.table_ticket", $.custom.table, {
 			$('<a href="#">Detail</a>').appendTo(
 				$("<td>").appendTo(tr)
 			).click(function() {
+				$(this).parent().parent().next().slideToggle()
+								.find("div").slideToggle();
 			});
+
+			var detailTbody = $('<tbody>').appendTo(
+				$('<table class="table table-hover">').appendTo(
+					$('<div>').appendTo(
+						$('<td colspan="10">').appendTo(
+							$('<tr class="active">').appendTo(tbody).hide()
+						)
+					).hide()
+				).append(
+					'<thead><tr class="active">' +
+						'<th>No.</th>' +
+						'<th>Flight number</th>' +
+						'<th>Departure</th>' +
+						'<th>Departure time</th>' +
+						'<th>Destination</th>' +
+						'<th>Arrival time</th>' +
+						'<th>Flight time</th>' +
+					'</tr></thead>'
+				)
+			);
+
+			$('<tr class="active">').appendTo(detailTbody)
+			.append(
+				$('<td>').text("1")
+			).append(
+				$('<td>').text(data['f1_number'])
+			).append(
+				$('<td>').text(data['Departure'])
+			).append(
+				$('<td>').text(data['Departure time'])
+			).append(
+				$('<td>').text(data['Transfer time'] == 0 ? data['Destination'] : data['t1'])
+			).append(
+				$('<td>').text(data['Transfer time'] == 0 ? data['Arrival time'] : data['f1_arrival_time'])
+			).append(
+				$('<td>').text(data['f1_flight_time'])
+			);
+
+			if(data['Transfer time'] >= 1) {
+				$('<tr class="active">').appendTo(detailTbody)
+				.append(
+					$('<td>').text("2")
+				).append(
+					$('<td>').text(data['f2_number'])
+				).append(
+					$('<td>').text(data['t1'])
+				).append(
+					$('<td>').text(data['f2_departure_time'])
+				).append(
+					$('<td>').text(data['Transfer time'] == 1 ? data['Destination'] : data['t2'])
+				).append(
+					$('<td>').text(data['Transfer time'] == 1 ? data['Arrival time'] : data['f2_arrival_time'])
+				).append(
+					$('<td>').text(data['f2_flight_time'])
+				)
+			}
+
+			if(data['Transfer time'] == 2) {
+				$('<tr class="active">').appendTo(detailTbody)
+				.append(
+					$('<td>').text("3")
+				).append(
+					$('<td>').text(data['f3_number'])
+				).append(
+					$('<td>').text(data['t2'])
+				).append(
+					$('<td>').text(data['f3_departure_time'])
+				).append(
+					$('<td>').text(data['Destination'])
+				).append(
+					$('<td>').text(data['Arrival time'])
+				).append(
+					$('<td>').text(data['f3_flight_time'])
+				)
+			}
 		}
 	}
 });
