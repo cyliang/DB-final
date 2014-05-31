@@ -13,6 +13,16 @@
     width: 920px;
   }
 }
+@media (min-width: 1500px) {
+  .container {
+    width: 1200px;
+  }
+}
+@media (min-width: 1800px) {
+  .container {
+    width: 1500px;
+  }
+}
 
 body {
 	padding-left: 260px;
