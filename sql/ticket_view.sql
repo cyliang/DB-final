@@ -1,5 +1,5 @@
 SELECT
-	0 AS `t_time`,
+	0 AS `Transfer time`,
     
 	`Flight number` AS `f1_number`,
     null AS `f2_number`,
@@ -23,9 +23,9 @@ SELECT
     
     `Departure time`,
     `Arrival time`,
-    `Flight time`,
-    0 AS `Transfer time`,
-    0 AS `overnight`,
+    `Flight time` AS `Total flying time`,
+    0 AS `Total transferring time`,
+    0 AS `Overnight`,
     `Price`,
     
     null AS `t1`,

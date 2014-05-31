@@ -1,5 +1,4 @@
 <?php
-require_once 'include/check_login.php';
 require_once 'include/db.php';
 
 $stat = $db->query("SELECT `Name`, `Country` FROM `City` ORDER BY `Country`");

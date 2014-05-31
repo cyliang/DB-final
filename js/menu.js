@@ -368,6 +368,7 @@ menu.actions = {
 	},
 	ticket: {
 		construct: function() {
+			changeTitle("Ticket searching");
 			$("#main").ticket({
 				track: true
 			});

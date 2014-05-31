@@ -4,73 +4,6 @@ $.widget("custom.ticket", {
 	},
 	_create: function() {
 		var _this = this;
-		this.selectHTML = {
-			country: function() {
-				var countrys;
-				$.ajax({
-					dataType: 'json',
-					url: 'php/country-all.php',
-					async: false,
-					success: function(data) {
-						countrys = data;
-					}
-				});
-
-				return '<option value=""></option><option>' + countrys.join('</option><option>') + '</option>';
-			},
-			city: function() {
-				var citys;
-				$.ajax({
-					dataType: 'json',
-					url: 'php/city-all.php',
-					async: false,
-					success: function(data) {
-						citys = data;
-					}
-				});
-
-				var countryGrp = "";
-				var optionStr = "";
-				for(var c in citys) {
-					if(citys[c].Country != countryGrp) {
-						if(countryGrp != "") {
-							optionStr += '</optgroup>';
-						}
-						countryGrp = citys[c].Country;
-						optionStr += '<optgroup label="' + countryGrp + '">';
-					}
-					optionStr += '<option value="' + citys[c].Name + '">' + citys[c].Name + '</option>';
-				}
-
-				return '<option value=""></option>' + optionStr;
-			},
-			airport: function() {
-				var airports;
-				$.ajax({
-					dataType: 'json',
-					url: 'php/airport-all.php',
-					async: false,
-					success: function(data) {
-						airports = data;
-					}
-				});
-
-				var countryGrp = "";
-				var optionStr = "";
-				for(var ap in airports) {
-					if(airports[ap].Country != countryGrp) {
-						if(countryGrp != "") {
-							optionStr += '</optgroup>';
-						}
-						countryGrp = airports[ap].Country;
-						optionStr += '<optgroup label="' + countryGrp + '">';
-					}
-					optionStr += '<option value="' + airports[ap].IATA + '">' + airports[ap].IATA + ' (' + airports[ap].Name + ')</option>';
-				}
-
-				return '<option value=""></option>' + optionStr;
-			}
-		};
 		this.searchForm = $('<form class="form-horizontal">')
 		.append(
 			$('<div class="form-group">').append(
@@ -168,11 +101,111 @@ $.widget("custom.ticket", {
 					'</label>' +
 				'</div>'
 			)
+		).append(
+			'<div class="form-group"><div class="col-md-2 col-md-offset-5">' +
+				'<button class="btn btn-warning btn-block" type="submit">Search</button>' + 
+			'</div></div>'
+		).submit(function() {
+			event.preventDefault();
+
+			_this.searchModal.append(_this.searchForm)
+					.appendTo(_this.element)
+					.remodal();
+			_this.searchPanel.remove();
+			_this.element.table_ticket({
+				source: 'php/ticket-view.php'
+			});
+		});
+
+		this.searchModal = $('<div>').html(
+			'<h1>Search for tickets...</h1>' +
+			'<p>Where and when do you want to go this time?</p>'
 		);
 
-		this.searchForm.clone(true).appendTo(this.element);
+		this.searchPanel = $('<div class="panel panel-warning">').appendTo(this.element)
+			.append('<div class="panel-heading">Where and when do you want to go?</div>')
+			.append(
+				$('<div class="panel-body">').append(this.searchForm)
+			);
 	},
 	_destroy: function() {
 		this.element.empty();
+	},
+	selectHTML: {
+		country: function() {
+			var countrys;
+			$.ajax({
+				dataType: 'json',
+				url: 'php/country-all.php',
+				async: false,
+				success: function(data) {
+					countrys = data;
+				}
+			});
+
+			return '<option value=""></option><option>' + countrys.join('</option><option>') + '</option>';
+		},
+		city: function() {
+			var citys;
+			$.ajax({
+				dataType: 'json',
+				url: 'php/city-all.php',
+				async: false,
+				success: function(data) {
+					citys = data;
+				}
+			});
+
+			var countryGrp = "";
+			var optionStr = "";
+			for(var c in citys) {
+				if(citys[c].Country != countryGrp) {
+					if(countryGrp != "") {
+						optionStr += '</optgroup>';
+					}
+					countryGrp = citys[c].Country;
+					optionStr += '<optgroup label="' + countryGrp + '">';
+				}
+				optionStr += '<option value="' + citys[c].Name + '">' + citys[c].Name + '</option>';
+			}
+
+			return '<option value=""></option>' + optionStr;
+		},
+		airport: function() {
+			var airports;
+			$.ajax({
+				dataType: 'json',
+				url: 'php/airport-all.php',
+				async: false,
+				success: function(data) {
+					airports = data;
+				}
+			});
+
+			var countryGrp = "";
+			var optionStr = "";
+			for(var ap in airports) {
+				if(airports[ap].Country != countryGrp) {
+					if(countryGrp != "") {
+						optionStr += '</optgroup>';
+					}
+					countryGrp = airports[ap].Country;
+					optionStr += '<optgroup label="' + countryGrp + '">';
+				}
+				optionStr += '<option value="' + airports[ap].IATA + '">' + airports[ap].IATA + ' (' + airports[ap].Name + ')</option>';
+			}
+
+			return '<option value=""></option>' + optionStr;
+		}
+	}
+});
+
+$.widget("custom.table_ticket", $.custom.table, {
+	options: {
+		track: false
+	}, 
+	_create: function() {
+		this._super();
+		this.ctrlSearch.row.remove();
 	}
 });
