@@ -46,7 +46,7 @@ if($user = test_login()) {
 
 	<h2>Ticket</h2>
 	<ul>
-		<li><a href="#">Ticket searching</a></li>
+		<li><a href="#" data-target="ticket">Ticket searching</a></li>
 		<li><a href="#">Tracked tickets</a></li>
 	</ul>
 
@@ -74,6 +74,7 @@ var user = <?=json_encode($user)?>;
 <script src="js/lib/jquery.remodal.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
 <script src="js/jquery-table.js"></script>
+<script src="js/jquery-ticket.js"></script>
 <script src="js/airport-table.js"></script>
 <script src="js/flight-table.js"></script>
 <script src="js/user-table.js"></script>

@@ -251,7 +251,7 @@ menu.actions = {
 					$('<div class="panel-body">').appendTo(panel)
 				).append(
 					$('<div class="form-group">').append(
-						$('<div class="col-md-3 control-label">').text('id:')
+						$('<div class="col-md-3 control-label">').html('<label>id:</label>')
 					).append(
 						$('<div class="col-md-9">').append(
 							$('<input class="form-control" disabled>')
@@ -260,7 +260,7 @@ menu.actions = {
 					)
 				).append(
 					$('<div class="form-group">').append(
-						$('<div class="col-md-3 control-label">').text('Name:')
+						$('<div class="col-md-3 control-label">').html('<label>Name:</label>')
 					).append(
 						$('<div class="col-md-9">').append(
 							$('<input type="text" name="Name" class="form-control">')
@@ -269,7 +269,7 @@ menu.actions = {
 					)
 				).append(
 					$('<div class="form-group">').append(
-						$('<div class="col-md-3 control-label">').text('email:')
+						$('<div class="col-md-3 control-label">').html('<label>email:</label>')
 					).append(
 						$('<div class="col-md-9">').append(
 							$('<input class="form-control" disabled>')
@@ -278,7 +278,7 @@ menu.actions = {
 					)
 				).append(
 					$('<div class="form-group">').append(
-						$('<div class="col-md-3 control-label">').text('Identity:')
+						$('<div class="col-md-3 control-label">').html('<label>Identity:</label>')
 					).append(
 						$('<div class="col-md-9">').append(
 							$('<input class="form-control" disabled>')
@@ -287,7 +287,7 @@ menu.actions = {
 					)
 				).append(
 					$('<div class="form-group">').append(
-						$('<div class="col-md-3 control-label">').text('New password:')
+						$('<div class="col-md-3 control-label">').html('<label>New password:</label>')
 					).append(
 						$('<div class="col-md-9">').append(
 							$('<input type="password" name="password" class="form-control">')
@@ -296,7 +296,7 @@ menu.actions = {
 					)
 				).append(
 					$('<div class="form-group">').append(
-						$('<div class="col-md-3 control-label">').text('Verifying password:')
+						$('<div class="col-md-3 control-label">').html('<label>Verifying password:</label>')
 					).append(
 						$('<div class="col-md-9">').append(
 							$('<input type="password" name="vpassword" class="form-control">')
@@ -364,6 +364,16 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").table_user("destroy");
+		}
+	},
+	ticket: {
+		construct: function() {
+			$("#main").ticket({
+				track: true
+			});
+		},
+		destruct: function() {
+			$("#main").ticket("destroy");
 		}
 	}
 };
