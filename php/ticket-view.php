@@ -60,9 +60,9 @@ $col_ary = array(
 $search_col = array();
 $search_val = array();
 
-if(isset($_POST['dep_type'], $_POST['dep']) && $_POST['dep_type'] != 'all') {
-	$search_val[':dep'] = $_POST['dep'];
-	switch($_POST['dep_type']) {
+if(isset($_GET['dep_type'], $_GET['dep']) && $_GET['dep_type'] != 'all') {
+	$search_val[':dep'] = $_GET['dep'];
+	switch($_GET['dep_type']) {
 	case 'country':
 		$search_col[] = '`Departure country` = :dep';
 		break;
@@ -77,9 +77,9 @@ if(isset($_POST['dep_type'], $_POST['dep']) && $_POST['dep_type'] != 'all') {
 	}
 }
 
-if(isset($_POST['des_type'], $_POST['des']) && $_POST['des_type'] != 'all') {
-	$search_val[':des'] = $_POST['des'];
-	switch($_POST['des_type']) {
+if(isset($_GET['des_type'], $_GET['des']) && $_GET['des_type'] != 'all') {
+	$search_val[':des'] = $_GET['des'];
+	switch($_GET['des_type']) {
 	case 'country':
 		$search_col[] = '`Destination country` = :des';
 		break;
@@ -94,9 +94,9 @@ if(isset($_POST['des_type'], $_POST['des']) && $_POST['des_type'] != 'all') {
 	}
 }
 
-if(isset($_POST['date_type']) && $_POST['date_type'] != 'all') {
-	$search_val[':date'] = $_POST['date'];
-	switch($_POST['date_type']) {
+if(isset($_GET['date_type']) && $_GET['date_type'] != 'all') {
+	$search_val[':date'] = $_GET['date'];
+	switch($_GET['date_type']) {
 	case 'dep':
 		$search_col[] = '`Departure time` >= :date';
 		break;
@@ -106,6 +106,11 @@ if(isset($_POST['date_type']) && $_POST['date_type'] != 'all') {
 	default:
 		unset($search_val[':date']);
 	}
+}
+
+if(isset($_GET['trans'])) {
+	$search_val[':trans'] = $_GET['trans'];
+	$search_col[] = '`Transfer time` <= :trans';
 }
 
 $search_str = count($search_col) > 0 ? "WHERE ".join(" AND ", $search_col) : "";

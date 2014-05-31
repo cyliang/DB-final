@@ -91,7 +91,7 @@ $.widget("custom.ticket", {
 			).append(
 				'<div class="col-md-6">' +
 					'<label class="radio-inline">' +
-						'<input type="radio" name="trans" value="2"> 2' +
+						'<input type="radio" name="trans" value="2" checked> 2' +
 					'</label>' +
 					'<label class="radio-inline">' +
 						'<input type="radio" name="trans" value="1"> 1' +
@@ -112,10 +112,12 @@ $.widget("custom.ticket", {
 					.appendTo(_this.element)
 					.remodal();
 			_this.searchPanel.remove();
-			_this.element.table_ticket({
-				source: 'php/ticket-view.php'
+			_this.tbl.table_ticket({
+				source: 'php/ticket-view.php?' + $(this).serialize()
 			});
 		});
+
+		this.tbl = $('<div>').appendTo(this.element);
 
 		this.searchModal = $('<div>').html(
 			'<h1>Search for tickets...</h1>' +
