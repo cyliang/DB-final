@@ -105,4 +105,7 @@ $(document).ready(function() {
 			}).popover("show");
 		}, 'json');
 	});
+
+
+	$("#ticket-content").ticket();
 });

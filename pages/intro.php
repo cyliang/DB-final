@@ -9,6 +9,7 @@
 	<link rel="shortcut icon" href="">
 	<link href="css/lib/bootstrap.min.css" rel="stylesheet">
 	<link href="css/jumbotron.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/lib/jquery.remodal.css">
 	<title>Flight-managing System</title>
 
 	<!-- Just for debugging purposes. Don't actually copy this line! -->
@@ -44,6 +45,7 @@
 	<h1>Flight-managing System</h1>
 	<p>This is a system that manage flights, as well as information about countries, airports, etc.</p>
 	<p><a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-regist">Get an account &raquo;</a></p>
+	<p><a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-ticket">Search for tickets &raquo;</a></p>
 </div>
 </div>
 
@@ -124,11 +126,30 @@
 </div>
 </div>
 
+<div class="modal fade" id="modal-ticket">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h4 class="modal-title">Ticket searching</h4>
+	</div>
+	<div class="modal-body" id="ticket-content">
+	</div>
+</div>
+</div>
+</div>
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="js/lib/jquery-1.11.1.min.js"></script>
+<script src="js/lib/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="js/lib/jquery.remodal.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
+<script src="js/jquery-table.js"></script>
+<script src="js/jquery-ticket.js"></script>
+<script src="js/jquery-airport.js"></script>
 <script src="js/intro.js"></script>
+<script src="js/abPost.js"></script>
 </body>
 </html>
