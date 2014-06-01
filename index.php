@@ -47,7 +47,7 @@ if($user = test_login()) {
 	<h2>Ticket</h2>
 	<ul>
 		<li><a href="#" data-target="ticket">Ticket searching</a></li>
-		<li><a href="#">Tracked tickets</a></li>
+		<li><a href="#" data-target="track">Tracked tickets</a></li>
 	</ul>
 
 	<h2>Login as</h2>

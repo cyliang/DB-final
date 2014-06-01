@@ -376,6 +376,17 @@ menu.actions = {
 		destruct: function() {
 			$("#main").ticket("destroy");
 		}
+	},
+	track: {
+		construct: function() {
+			changeTitle("Tracked tickets");
+			$("#main").table_ticket({
+				source: 'php/favorite-view.php'
+			});
+		},
+		destruct: function() {
+			$("#main").table_ticket("destroy");
+		}
 	}
 };
 
