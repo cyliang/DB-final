@@ -26,6 +26,9 @@ $col_ary = array(
 	"Overnight",
 	"Price",
 
+	"f1_id",
+	"f2_id",
+	"f3_id",
 	"f1_number",
 	"f2_number",
 	"f3_number",

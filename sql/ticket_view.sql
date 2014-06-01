@@ -1,6 +1,10 @@
 SELECT
 	0 AS `Transfer time`,
     
+	`id` AS `f1_id`,
+	null AS `f2_id`,
+	null AS `f3_id`,
+	
 	`Flight number` AS `f1_number`,
     null AS `f2_number`,
     null AS `f3_number`,
@@ -56,7 +60,11 @@ FROM `flight_view`
 UNION
 (
 SELECT
-	1 AS `t_time`,
+	1,
+    
+	`f1`.`id`,
+	`f2`.`id`,
+	null,
     
 	`f1`.`Flight number`,
     `f2`.`Flight number`,
@@ -118,6 +126,10 @@ UNION
 (
 SELECT
 	2,
+    
+	`f1`.`id`,
+	`f2`.`id`,
+	`f3`.`id`,
     
 	`f1`.`Flight number`,
     `f2`.`Flight number`,

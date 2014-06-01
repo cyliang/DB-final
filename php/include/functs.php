@@ -117,7 +117,7 @@ function add_entry($table_name, $col_ary) {
 	}
 
 	global $db;
-	$stat = $db->prepare("INSERT INTO $table_name (`".join('`, `', $col_ary)."`)
+	$stat = $db->prepare("INSERT INTO `$table_name` (`".join('`, `', $col_ary)."`)
 				VALUES ( ".join(' , ', $q_ary)." )");
 	$stat->execute($val_ary);
 

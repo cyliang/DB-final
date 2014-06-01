@@ -128,7 +128,8 @@ $.widget("custom.ticket", {
 				});
 			}
 			_this.tbl.table_ticket({
-				source: 'php/ticket-view.php?' + $(this).serialize()
+				source: 'php/ticket-view.php?' + $(this).serialize(),
+				track: _this.options.track
 			});
 		});
 
@@ -230,6 +231,9 @@ $.widget("custom.table_ticket", $.custom.table, {
 	_refresh: function() {
 		if(!this.removeTh) {
 			this.ctrlSearch.row
+			.add(this.column['f1_id'])
+			.add(this.column['f2_id'])
+			.add(this.column['f3_id'])
 			.add(this.column['f1_number'])
 			.add(this.column['f2_number'])
 			.add(this.column['f3_number'])
@@ -275,7 +279,10 @@ $.widget("custom.table_ticket", $.custom.table, {
 			.remove();
 
 			this.column.Detail = $("<th>Detail</th>").appendTo(this.table.find("thead tr"));
-			this.table.removeClass("table-striped table-hover");//.addClass("table-bordered");
+			if(this.options.track) {
+				this.column.Track = $("<th>Track</th>").insertAfter(this.column.Detail);
+			}
+			this.table.removeClass("table-striped table-hover");
 
 			this.removeTh = true;
 		}
@@ -323,10 +330,33 @@ $.widget("custom.table_ticket", $.custom.table, {
 								.find("div").slideToggle();
 			});
 
+			/* Track */
+			if(this.options.track) {
+				$('<form>').appendTo(
+					$("<td>").appendTo(tr)
+				).append(
+					$('<input type="hidden" name="flight_id1">').val(data['f1_id'])
+				).append(
+					$('<input type="hidden" name="flight_id2">').val(data['f2_id'])
+				).append(
+					$('<input type="hidden" name="flight_id3">').val(data['f3_id'])
+				).append(
+					$('<button type="submit" class="btn btn-success btn-xs">Track this ticket</button>')
+				).submit(function() {
+					event.preventDefault();
+					$(this).find("button").attr("disabled", "").removeClass("btn-success").addClass("btn-warning");
+
+					abPost('php/favorite-add.php', $(this).serialize(), function(data) {
+						alert("Ticket has been added to your track list.\nPlease do no track again.");
+					});
+				});
+			}
+
+			/* Flight detail */
 			var detailTbody = $('<tbody>').appendTo(
 				$('<table class="table table-hover">').appendTo(
 					$('<div>').appendTo(
-						$('<td colspan="10">').appendTo(
+						$('<td colspan="' + (this.options.track ? "11" : "10") + '">').appendTo(
 							$('<tr class="active">').appendTo(tbody).hide()
 						)
 					).hide()
