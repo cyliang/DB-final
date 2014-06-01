@@ -30,30 +30,6 @@ $.widget("custom.table", {
 		}
 
 		var _this = this;
-		abPost(this.options.source, {}, function(data) {
-			_this.data = data;
-			_this.column = new Object();
-			var theadRow = _this.table.find("thead tr")
-
-			if(_this.options.editable) {
-				_this.column.modify = $("<th>Modify</th>").appendTo(theadRow);
-			}
-
-			for(var col in data.data[0]) {
-				_this.column[col] = $("<th>").appendTo(theadRow)
-		       					.text(col + " ")
-							.attr("data-content", col)
-							.click(function() {
-								_this._sort($(this).attr("data-content"));
-							}).tooltip({
-								title: "Click to sort by " + col,
-								container: "body"
-							});
-				_this.ctrlSearch.select.append('<option value="' + col + '">' + col + '</option>');
-			}
-
-			_this._refresh();
-		});
 
 		this.ctrlPage = new Object();
 		this.ctrlPage.nowPage = 1;
@@ -179,6 +155,49 @@ $.widget("custom.table", {
 				});
 			});
 		}
+
+		abPost(this.options.source, {}, function(data) {
+			if(data.totalPage == 0) {
+				var div = $('<div class="row">');
+				if(_this.options.editable) {
+					_this.ctrlSearch.addCol.appendTo(div);
+				}
+
+				$('<button class="btn btn-warning">Refresh</button>').prependTo(
+					$('<div class="alert alert-warning well-lg">').appendTo(
+						_this.element.empty().html(div)
+					).html("<div>There isn't any data in here at all. Please try later.</div>")
+				).css("float", "right")
+				.click(function() {
+					_this.element.empty();
+					_this._create();
+				});
+
+			} else {
+				_this.data = data;
+				_this.column = new Object();
+				var theadRow = _this.table.find("thead tr")
+
+				if(_this.options.editable) {
+					_this.column.modify = $("<th>Modify</th>").appendTo(theadRow);
+				}
+
+				for(var col in data.data[0]) {
+					_this.column[col] = $("<th>").appendTo(theadRow)
+								.text(col + " ")
+								.attr("data-content", col)
+								.click(function() {
+									_this._sort($(this).attr("data-content"));
+								}).tooltip({
+									title: "Click to sort by " + col,
+									container: "body"
+								});
+					_this.ctrlSearch.select.append('<option value="' + col + '">' + col + '</option>');
+				}
+
+				_this._refresh();
+			}
+		});
 	},
 	_destroy: function() {
 		this.element.empty();
