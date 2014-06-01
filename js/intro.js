@@ -94,15 +94,18 @@ $(document).ready(function() {
 		$.post('php/user-login.php', $(this).serialize(), function(data, status) {
 			if(status != "success") {
 				alert("Connection error!");
-			} else if(data.status == 'success') {
-				location.reload();
+			} else {
+				if(data.status == 'success') {
+					location.reload();
+				} else {
+					login_form.find('[name="email"]').popover({
+						html: true,
+						trugger: "manual",
+						content: '<span class="text-danger">The email or password is not correct!</span>',
+						placement: 'bottom'
+					}).popover("show");
+				}
 			}
-			login_form.find('[name="email"]').popover({
-				html: true,
-				trugger: "manual",
-				content: '<span class="text-danger">The email or password is not correct!</span>',
-				placement: 'bottom'
-			}).popover("show");
 		}, 'json');
 	});
 
