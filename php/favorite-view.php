@@ -10,6 +10,7 @@ if($user === false) {
 }
 
 $col_ary = array(
+	"id",
 	"Departure",
 	"Departure name",
 	"Departure country",

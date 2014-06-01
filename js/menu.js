@@ -381,7 +381,9 @@ menu.actions = {
 		construct: function() {
 			changeTitle("Tracked tickets");
 			$("#main").table_ticket({
-				source: 'php/favorite-view.php'
+				source: 'php/favorite-view.php',
+				removeTarget: 'php/favorite-delete.php',
+				tracked_list: true
 			});
 		},
 		destruct: function() {

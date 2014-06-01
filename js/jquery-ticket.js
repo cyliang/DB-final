@@ -222,7 +222,8 @@ $.widget("custom.ticket", {
 
 $.widget("custom.table_ticket", $.custom.table, {
 	options: {
-		track: false
+		track: false,
+		tracked_list: false
 	}, 
 	_create: function() {
 		this.removeTh = false;
@@ -277,6 +278,10 @@ $.widget("custom.table_ticket", $.custom.table, {
 			.add(this.column['f2_flight_time'])
 			.add(this.column['f3_flight_time'])
 			.remove();
+			if(this.options.tracked_list) {
+				this.column['id'].remove();
+				this.column['remove'] = $("<th>").prependTo(this.table.find("thead tr"));
+			}
 
 			this.column.Detail = $("<th>Detail</th>").appendTo(this.table.find("thead tr"));
 			if(this.options.track) {
@@ -288,6 +293,7 @@ $.widget("custom.table_ticket", $.custom.table, {
 		}
 		this._super();
 		var tbody = this.table.find("tbody").empty();
+		var _this = this;
 
 		for(var row in this.data.data) {
 			var tr = $("<tr>").appendTo(tbody);
@@ -352,11 +358,26 @@ $.widget("custom.table_ticket", $.custom.table, {
 				});
 			}
 
+			/* Remove */
+			if(this.options.tracked_list) {
+				$('<a href="#"></a>').appendTo(
+					$("<td>").prependTo(tr)
+				).append('<span class="glyphicon glyphicon-trash text-danger"></span>')
+				.attr("data-target", data['id'])
+				.click(function() {
+					abPost(_this.options.removeTarget, {
+						key: $(this).attr('data-target')
+					}, function(data) {
+						_this._refetch("now");
+					});
+				})
+			}
+
 			/* Flight detail */
 			var detailTbody = $('<tbody>').appendTo(
 				$('<table class="table table-hover">').appendTo(
 					$('<div>').appendTo(
-						$('<td colspan="' + (this.options.track ? "11" : "10") + '">').appendTo(
+						$('<td colspan="' + (this.options.track || this.options.tracked_list ? "11" : "10") + '">').appendTo(
 							$('<tr class="active">').appendTo(tbody).hide()
 						)
 					).hide()
