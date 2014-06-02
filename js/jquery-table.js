@@ -141,10 +141,20 @@ $.widget("custom.table", {
 
 				addForm.submit(function() {
 					event.preventDefault();
+					var form = this;
 
 					abPost(_this.options.addTarget, $(this).serialize(), function(data) {
 						$.remodal.lookup[addModal.data('remodal')].close();
 						_this._refetch("first");
+					}, {
+						exist: function() {
+							$(form).find(".form-group").first().popover({
+								html: true,
+								trigger: 'manual',
+								content: '<strong class="text-danger">This entry is already exist!</strong>',
+								container: '.remodal-overlay'
+							}).popover("show");
+						}
 					});
 				});
 
@@ -317,10 +327,20 @@ $.widget("custom.table", {
 							);
 							editForm.submit(function() {
 								event.preventDefault();
+								var form = this;
 
 								abPost(_this.options.editTarget, $(this).serialize(), function(data) {
 									$.remodal.lookup[editModal.data('remodal')].close();
 									_this._refetch("now");
+								}, {
+									exist: function() {
+										$(form).find(".form-group").first().popover({
+											html: true,
+											trigger: 'manual',
+											content: '<strong class="text-danger">This entry is already exist!</strong>',
+											container: '.remodal-overlay'
+										}).popover("show");
+									}
 								});
 							});
 

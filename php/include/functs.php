@@ -90,7 +90,7 @@ function edit_entry($table_name, $primary_key, $changeable_col) {
 			$stat->execute($val_ary);
 		}
 		echo json_encode(array(
-			"status" => "success",
+			"status" => $stat->errorCode() == "23000" ? "exist" : "success",
 			"data" => array()
 		));
 	} else {
@@ -121,9 +121,15 @@ function add_entry($table_name, $col_ary) {
 				VALUES ( ".join(' , ', $q_ary)." )");
 	$stat->execute($val_ary);
 
-	echo json_encode(array(
-		"status" => $stat->rowCount() === 1 ? "success" : "fail",
-		"data" => array()
-	));
+	if($stat->errorCode() == "23000") {
+		echo json_encode(array(
+			"status" => "exist"
+		));
+	} else {
+		echo json_encode(array(
+			"status" => $stat->rowCount() === 1 ? "success" : "fail",
+			"data" => array()
+		));
+	}
 }
 ?>
