@@ -115,6 +115,11 @@ if(isset($_GET['trans'])) {
 	$search_col[] = '`Transfer time` <= :trans';
 }
 
+if(isset($_GET['overnight'])) {
+	$search_val[':overnight'] = $_GET['overnight'] == 'yes' ? 1 : 0;
+	$search_col[] = '`Overnight` <= :overnight';
+}
+
 $search_str = count($search_col) > 0 ? "WHERE ".join(" AND ", $search_col) : "";
 
 

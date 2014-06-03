@@ -28,7 +28,7 @@ SELECT
     `Departure time`,
     `Arrival time`,
     `Flight time` AS `Total flying time`,
-    0 AS `Total transferring time`,
+    CAST('00:00:00' AS TIME) AS `Total transferring time`,
     0 AS `Overnight`,
     `Price`,
     
@@ -90,7 +90,7 @@ SELECT
     `f2`.`Arrival time`,
     ADDTIME(`f1`.`Flight time`, `f2`.`Flight time`),
     TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`),
-    IF(TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > '12:00:00', 1, 0),
+    TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > CAST('12:00:00' AS TIME),
     (`f1`.`Price` + `f2`.`Price`) * 0.9,
     
     `f1`.`Destination`,
@@ -120,7 +120,7 @@ SELECT
 FROM `flight_view` AS `f1`
 	INNER JOIN `flight_view` AS `f2`
     	ON `f1`.`Destination` = `f2`.`Departure`
-        AND TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) >= '02:00:00'
+        AND TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) >= CAST('02:00:00' AS TIME)
 )
 UNION
 (
@@ -155,7 +155,8 @@ SELECT
     `f3`.`Arrival time`,
     ADDTIME(`f1`.`Flight time`, ADDTIME(`f2`.`Flight time`, `f3`.`Flight time`)),
     ADDTIME(TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`), TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`)),
-    IF(TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > '12:00:00' OR TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) > '12:00:00', 1, 0),
+    TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > CAST('12:00:00' AS TIME) OR 
+        TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) > CAST('12:00:00' AS TIME),
     (`f1`.`Price` + `f2`.`Price` + `f3`.`Price`) * 0.8,
     
     `f2`.`Departure`,
@@ -185,10 +186,10 @@ SELECT
 FROM `flight_view` AS `f1`
 	INNER JOIN `flight_view` AS `f2`
     	ON `f1`.`Destination` = `f2`.`Departure`
-        AND TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) >= '02:00:00'
+        AND TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) >= CAST('02:00:00' AS TIME)
     INNER JOIN `flight_view` AS `f3`
     	ON `f2`.`Destination` = `f3`.`Departure`
-        AND TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) >= '02:00:00'
+        AND TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) >= CAST('02:00:00' AS TIME)
         AND `f1`.`Departure` != `f3`.`Departure`
         AND `f1`.`Destination` != `f3`.`Destination`
 )

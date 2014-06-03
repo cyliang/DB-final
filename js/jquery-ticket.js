@@ -22,7 +22,7 @@ $.widget("custom.ticket", {
 							sel.attr("disabled", "").removeAttr("required");
 						} else {
 							sel.html(_this.selectHTML[$(this).val()])
-							.removeAttr("disabled").attr("required");
+							.removeAttr("disabled").attr("required", "");
 						}
 					})
 				)
@@ -49,7 +49,7 @@ $.widget("custom.ticket", {
 							sel.attr("disabled", "").removeAttr("required");
 						} else {
 							sel.html(_this.selectHTML[$(this).val()])
-							.removeAttr("disabled").attr("required");
+							.removeAttr("disabled").attr("required", "");
 						}
 					})
 				)
@@ -74,7 +74,7 @@ $.widget("custom.ticket", {
 						if($(this).val() == "all") {
 							sel.attr("disabled", "").removeAttr("required");
 						} else {
-							sel.removeAttr("disabled").attr("required");
+							sel.removeAttr("disabled").attr("required", "");
 						}
 					})
 				)
@@ -98,6 +98,21 @@ $.widget("custom.ticket", {
 					'</label>' +
 					'<label class="radio-inline">' +
 						'<input type="radio" name="trans" value="0"> 0' +
+					'</label>' +
+				'</div>'
+			)
+		).append(
+			$('<div class="form-group">').append(
+				'<div class="col-md-3 control-label"><label>Overnight:</label></div>'
+			).append(
+				'<div class="col-md-3"><p class="form-control-static">No more than</p></div>'
+			).append(
+				'<div class="col-md-6">' +
+					'<label class="radio-inline">' +
+						'<input type="radio" name="overnight" value="yes" checked> Allow' +
+					'</label>' +
+					'<label class="radio-inline">' +
+						'<input type="radio" name="overnight" value="no"> Avoid' +
 					'</label>' +
 				'</div>'
 			)
