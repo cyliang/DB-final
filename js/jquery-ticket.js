@@ -340,6 +340,7 @@ $.widget("custom.table_ticket", $.custom.table, {
 			$("<td>").text(data['Transfer time']).appendTo(tr);
 			$("<td>").text(data['Total flying time']).appendTo(tr);
 			$("<td>").text(data['Total transferring time']).appendTo(tr);
+			$("<td>").text(data['Total time']).appendTo(tr);
 			$("<td>").text(data['Overnight']).appendTo(tr);
 			$("<td>").text(data['Price']).appendTo(tr);
 
@@ -392,7 +393,7 @@ $.widget("custom.table_ticket", $.custom.table, {
 			var detailTbody = $('<tbody>').appendTo(
 				$('<table class="table table-hover">').appendTo(
 					$('<div>').appendTo(
-						$('<td colspan="' + (this.options.track || this.options.tracked_list ? "11" : "10") + '">').appendTo(
+						$('<td colspan="' + (this.options.track || this.options.tracked_list ? "12" : "11") + '">').appendTo(
 							$('<tr class="active">').appendTo(tbody).hide()
 						)
 					).hide()

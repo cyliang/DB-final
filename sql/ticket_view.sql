@@ -29,6 +29,7 @@ SELECT
     `Arrival time`,
     `Flight time` AS `Total flying time`,
     CAST('00:00:00' AS TIME) AS `Total transferring time`,
+    `Flight time` AS `Total time`,
     0 AS `Overnight`,
     `Price`,
     
@@ -90,6 +91,10 @@ SELECT
     `f2`.`Arrival time`,
     ADDTIME(`f1`.`Flight time`, `f2`.`Flight time`),
     TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`),
+    TIMEDIFF(
+	CONVERT_TZ(`f2`.`Arrival time`, `f2`.`Destination timezone`, `f1`.`Departure timezone`),
+	`f1`.`Departure time`
+    ),
     TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > CAST('12:00:00' AS TIME),
     (`f1`.`Price` + `f2`.`Price`) * 0.9,
     
@@ -155,6 +160,10 @@ SELECT
     `f3`.`Arrival time`,
     ADDTIME(`f1`.`Flight time`, ADDTIME(`f2`.`Flight time`, `f3`.`Flight time`)),
     ADDTIME(TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`), TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`)),
+    TIMEDIFF(
+	CONVERT_TZ(`f3`.`Arrival time`, `f3`.`Destination timezone`, `f1`.`Departure timezone`),
+	`f1`.`Departure time`
+    ),
     TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > CAST('12:00:00' AS TIME) OR 
         TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) > CAST('12:00:00' AS TIME),
     (`f1`.`Price` + `f2`.`Price` + `f3`.`Price`) * 0.8,

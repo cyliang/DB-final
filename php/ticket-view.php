@@ -23,6 +23,7 @@ $col_ary = array(
 	"Transfer time",
 	"Total flying time",
 	"Total transferring time",
+	"Total time",
 	"Overnight",
 	"Price",
 
