@@ -3,20 +3,33 @@ $(document).ready(function() {
 		displace: false
 	});
 	$.sidr("open");
+	$("#sql_button").hide();
 
 	$('#sidr a[href="#"]').click(function() {
 		var target = $(this).attr("data-target");
 		if(target in menu.actions) {
 			$('#sidr li').removeClass('active');
 			$(this).parent().addClass('active');
+			$("#sql_button").hide();
 
-			if(menu.current != null && "destruct" in menu.actions[menu.current]) {
-				menu.actions[menu.current].destruct();
+			if(menu.current != null) {
+				if("destruct" in menu.actions[menu.current]) {
+					menu.actions[menu.current].destruct();
+				}
+				if("sql" in menu.actions[menu.current]) {
+					menu.actions[menu.current].sql.hide();
+				}
 			}
 			menu.current = target;
 			menu.actions[target].construct();
+			if("sql" in menu.actions[target]) {
+				menu.actions[target].sql.show();
+				$("#sql_button").show();
+			}
 		}
 	});
+
+	SyntaxHighlighter.all();
 });
 
 var menu = Object();
@@ -51,7 +64,10 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").table("destroy");
-		}
+		},
+		sql: $('<div>').appendTo("#sql").append(
+			$('<pre class="brush: sql">').text("SELECT `Name`, `Abbreviation` FROM `Country`")
+		).hide()
 	},
 	city: {
 		construct: function() {
@@ -89,7 +105,10 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").table("destroy");
-		}
+		},
+		sql: $('<div>').appendTo("#sql").append(
+			$('<pre class="brush: sql">').text("SELECT `Name`, `Country` FROM `City`")
+		).hide()
 	},
 	airport: {
 		construct: function() {
@@ -145,7 +164,20 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").table_airport("destroy");
-		}
+		},
+		sql: $('<div>').appendTo("#sql").append($('<pre class="brush: sql">').text(
+			'SELECT\n' +
+				'\t`Airport`.`IATA` AS `IATA`,\n' +
+				'\t`Airport`.`Name` AS `Name`,\n' +
+				'\t`Airport`.`longitude` AS `longitude`,\n' +
+				'\t`Airport`.`latitude` AS `latitude`,\n' +
+				'\t`Airport`.`City` AS `City`,\n' +
+				'\t`Airport`.`Timezone` AS `Timezone`,\n' +
+				'\t`City`.`Country` AS `Country`\n' +
+			'FROM `Airport`\n' +
+				'\tLEFT JOIN `City`\n' +
+					'\t\tON `Airport`.`City` = `City`.`Name`'
+		)).hide()
 	},
 	flight: {
 		construct: function() {
@@ -238,7 +270,38 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").table_flight("destroy");
-		}
+		},
+		sql: $('<div>').appendTo("#sql").append($('<pre class="brush: sql">').text(
+			"SELECT\n" +
+			"\t`id`,\n" +
+			"\t`Flight_number` AS `Flight number`,\n" +
+			"\t`Departure`,\n" +
+			"\tdep.`Name` AS `Departure name`,\n" +
+			"\tdep.`Country` AS `Departure country`,\n" +
+			"\tdep.`City` AS `Departure city`,\n" +
+			"\tdep.`Timezone` AS `Departure timezone`,\n" +
+			"\tdep.`longitude` AS `Departure longitude`,\n" +
+			"\tdep.`latitude` AS `Departure latitude`,\n" +
+			"\t`Departure_time` AS `Departure time`,\n" +
+			"\t`Destination`,\n" +
+			"\tdes.`Name` AS `Destination name`,\n" +
+			"\tdes.`Country` AS `Destination country`,\n" +
+			"\tdes.`City` AS `Destination city`,\n" +
+			"\tdes.`Timezone` AS `Destination timezone`,\n" +
+			"\tdes.`longitude` AS `Destination longitude`,\n" +
+			"\tdes.`latitude` AS `Destination latitude`,\n" +
+			"\t`Arrival_time` AS `Arrival time`,\n" +
+			"\tTIMEDIFF(\n" +
+			"\t\tCONVERT_TZ(`Arrival_time`, des.`Timezone`, dep.`Timezone`),\n" +
+			"\t\t`Departure_time`\n" +
+			"\t) AS `Flight time`,\n" +
+			"\t`Price`\n" +
+			"FROM `Flight`\n" +
+			"\tLEFT JOIN `airport_view` AS dep\n" +
+			"\t\tON `Flight`.`Departure` = dep.`IATA`\n" +
+			"\tLEFT JOIN `airport_view` AS des\n" +
+			"\t\tON `Flight`.`Destination` = des.`IATA`"
+		)).hide()
 	},
 	profile: {
 		construct: function() {
@@ -375,7 +438,216 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").ticket("destroy");
-		}
+		},
+		sql: $('<div>').appendTo("#sql").append($('<pre class="brush: sql">').text(
+			"SELECT\n" +
+				"\t0 AS `Transfer time`,\n" +
+				"\n" +
+				"\t`id` AS `f1_id`,\n" +
+				"\tnull AS `f2_id`,\n" +
+				"\tnull AS `f3_id`,\n" +
+				"\t\n" +
+				"\t`Flight number` AS `f1_number`,\n" +
+				"\tnull AS `f2_number`,\n" +
+				"\tnull AS `f3_number`,\n" +
+				"\n" +
+				"\t`Departure`,\n" +
+				"\t`Departure name`,\n" +
+				"\t`Departure country`,\n" +
+				"\t`Departure city`,\n" +
+				"\t`Departure timezone`,\n" +
+				"\t`Departure longitude`,\n" +
+				"\t`Departure latitude`,\n" +
+				"\n" +
+				"\t`Destination`,\n" +
+				"\t`Destination name`,\n" +
+				"\t`Destination country`, \n" +
+				"\t`Destination city`, \n" +
+				"\t`Destination timezone`, \n" +
+				"\t`Destination longitude`, \n" +
+				"\t`Destination latitude`,\n" +
+				"\n" +
+				"\t`Departure time`,\n" +
+				"\t`Arrival time`,\n" +
+				"\t`Flight time` AS `Total flying time`,\n" +
+				"\tCAST('00:00:00' AS TIME) AS `Total transferring time`,\n" +
+				"\t`Flight time` AS `Total time`,\n" +
+				"\t0 AS `Overnight`,\n" +
+				"\t`Price`,\n" +
+				"\n" +
+				"\tnull AS `t1`,\n" +
+				"\tnull AS `t1_name`,\n" +
+				"\tnull AS `t1_country`,\n" +
+				"\tnull AS `t1_city`,\n" +
+				"\tnull AS `t1_timezone`,\n" +
+				"\tnull AS `t1_longitude`,\n" +
+				"\tnull AS `t1_latitude`,\n" +
+				"\n" +
+				"\tnull AS `t2`,\n" +
+				"\tnull AS `t2_name`,\n" +
+				"\tnull AS `t2_country`,\n" +
+				"\tnull AS `t2_city`,\n" +
+				"\tnull AS `t2_timezone`,\n" +
+				"\tnull AS `t2_longitude`,\n" +
+				"\tnull AS `t2_latitude`,\n" +
+				"\n" +
+				"\tnull AS `f1_arrival_time`,\n" +
+				"\tnull AS `f2_departure_time`,\n" +
+				"\tnull AS `f2_arrival_time`,\n" +
+				"\tnull AS `f3_departure_time`,\n" +
+				"\n" +
+				"\t`Flight time` AS `f1_flight_time`,\n" +
+				"\tnull AS `f2_flight_time`,\n" +
+				"\tnull AS `f3_flight_time`\n" +
+			"FROM `flight_view`\n" +
+			"UNION\n" +
+			"(\n" +
+			"SELECT\n" +
+				"\t1,\n" +
+				"\n" +
+				"\t`f1`.`id`,\n" +
+				"\t`f2`.`id`,\n" +
+				"\tnull,\n" +
+				"\n" +
+				"\t`f1`.`Flight number`,\n" +
+				"\t`f2`.`Flight number`,\n" +
+				"\tnull,\n" +
+				"\n" +
+				"\t`f1`.`Departure`,\n" +
+				"\t`f1`.`Departure name`,\n" +
+				"\t`f1`.`Departure country`,\n" +
+				"\t`f1`.`Departure city`,\n" +
+				"\t`f1`.`Departure timezone`,\n" +
+				"\t`f1`.`Departure longitude`,\n" +
+				"\t`f1`.`Departure latitude`,\n" +
+				"\n" +
+				"\t`f2`.`Destination`,\n" +
+				"\t`f2`.`Destination name`,\n" +
+				"\t`f2`.`Destination country`, \n" +
+				"\t`f2`.`Destination city`, \n" +
+				"\t`f2`.`Destination timezone`, \n" +
+				"\t`f2`.`Destination longitude`, \n" +
+				"\t`f2`.`Destination latitude`,\n" +
+				"\n" +
+				"\t`f1`.`Departure time`,\n" +
+				"\t`f2`.`Arrival time`,\n" +
+				"\tADDTIME(`f1`.`Flight time`, `f2`.`Flight time`),\n" +
+				"\tTIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`),\n" +
+				"\tTIMEDIFF(\n" +
+					"\t\tCONVERT_TZ(`f2`.`Arrival time`, `f2`.`Destination timezone`, `f1`.`Departure timezone`),\n" +
+					"\t\t`f1`.`Departure time`\n" +
+				"\t),\n" +
+				"\tTIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > CAST('12:00:00' AS TIME),\n" +
+				"\t(`f1`.`Price` + `f2`.`Price`) * 0.9,\n" +
+				"\n" +
+				"\t`f1`.`Destination`,\n" +
+				"\t`f1`.`Destination name`,\n" +
+				"\t`f1`.`Destination country`, \n" +
+				"\t`f1`.`Destination city`, \n" +
+				"\t`f1`.`Destination timezone`, \n" +
+				"\t`f1`.`Destination longitude`, \n" +
+				"\t`f1`.`Destination latitude`,\n" +
+				"\n" +
+				"\tnull,\n" +
+				"\tnull,\n" +
+				"\tnull,\n" +
+				"\tnull,\n" +
+				"\tnull,\n" +
+				"\tnull,\n" +
+				"\tnull,\n" +
+				"\n" +
+				"\t`f1`.`Arrival time`,\n" +
+				"\t`f2`.`Departure time`,\n" +
+				"\tnull,\n" +
+				"\tnull,\n" +
+				"\n" +
+				"\t`f1`.`Flight time`,\n" +
+				"\t`f2`.`Flight time`,\n" +
+				"\tnull\n" +
+			"FROM `flight_view` AS `f1`\n" +
+				"\tINNER JOIN `flight_view` AS `f2`\n" +
+					"\t\tON `f1`.`Destination` = `f2`.`Departure`\n" +
+					"\t\tAND TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) >= CAST('02:00:00' AS TIME)\n" +
+			")\n" +
+			"UNION\n" +
+			"(\n" +
+			"SELECT\n" +
+				"\t2,\n" +
+				"\n" +
+				"\t`f1`.`id`,\n" +
+				"\t`f2`.`id`,\n" +
+				"\t`f3`.`id`,\n" +
+				"\n" +
+				"\t`f1`.`Flight number`,\n" +
+				"\t`f2`.`Flight number`,\n" +
+				"\t`f3`.`Flight number`,\n" +
+				"\n" +
+				"\t`f1`.`Departure`,\n" +
+				"\t`f1`.`Departure name`,\n" +
+				"\t`f1`.`Departure country`,\n" +
+				"\t`f1`.`Departure city`,\n" +
+				"\t`f1`.`Departure timezone`,\n" +
+				"\t`f1`.`Departure longitude`,\n" +
+				"\t`f1`.`Departure latitude`,\n" +
+				"\n" +
+				"\t`f3`.`Destination`,\n" +
+				"\t`f3`.`Destination name`,\n" +
+				"\t`f3`.`Destination country`, \n" +
+				"\t`f3`.`Destination city`, \n" +
+				"\t`f3`.`Destination timezone`, \n" +
+				"\t`f3`.`Destination longitude`, \n" +
+				"\t`f3`.`Destination latitude`,\n" +
+				"\n" +
+				"\t`f1`.`Departure time`,\n" +
+				"\t`f3`.`Arrival time`,\n" +
+				"\tADDTIME(`f1`.`Flight time`, ADDTIME(`f2`.`Flight time`, `f3`.`Flight time`)),\n" +
+				"\tADDTIME(\n" +
+					"\t\tTIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`),\n" +
+					"\t\tTIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`)\n" +
+				"\t),\n" +
+				"\tTIMEDIFF(\n" +
+					"\t\tCONVERT_TZ(`f3`.`Arrival time`, `f3`.`Destination timezone`, `f1`.`Departure timezone`),\n" +
+					"\t\t`f1`.`Departure time`\n" +
+				"\t),\n" +
+				"\tTIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > CAST('12:00:00' AS TIME) OR \n" +
+				"\tTIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) > CAST('12:00:00' AS TIME),\n" +
+				"\t(`f1`.`Price` + `f2`.`Price` + `f3`.`Price`) * 0.8,\n" +
+				"\n" +
+				"\t`f2`.`Departure`,\n" +
+				"\t`f2`.`Departure name`,\n" +
+				"\t`f2`.`Departure country`,\n" +
+				"\t`f2`.`Departure city`,\n" +
+				"\t`f2`.`Departure timezone`,\n" +
+				"\t`f2`.`Departure longitude`,\n" +
+				"\t`f2`.`Departure latitude`,\n" +
+				"\n" +
+				"\t`f3`.`Departure`,\n" +
+				"\t`f3`.`Departure name`,\n" +
+				"\t`f3`.`Departure country`,\n" +
+				"\t`f3`.`Departure city`,\n" +
+				"\t`f3`.`Departure timezone`,\n" +
+				"\t`f3`.`Departure longitude`,\n" +
+				"\t`f3`.`Departure latitude`,\n" +
+				"\n" +
+				"\t`f1`.`Arrival time`,\n" +
+				"\t`f2`.`Departure time`,\n" +
+				"\t`f2`.`Arrival time`,\n" +
+				"\t`f3`.`Departure time`,\n" +
+				"\n" +
+				"\t`f1`.`Flight time`,\n" +
+				"\t`f2`.`Flight time`,\n" +
+				"\t`f3`.`Flight time`\n" +
+			"FROM `flight_view` AS `f1`\n" +
+				"\tINNER JOIN `flight_view` AS `f2`\n" +
+					"\t\tON `f1`.`Destination` = `f2`.`Departure`\n" +
+					"\t\tAND TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) >= CAST('02:00:00' AS TIME)\n" +
+				"\tINNER JOIN `flight_view` AS `f3`\n" +
+					"\t\tON `f2`.`Destination` = `f3`.`Departure`\n" +
+					"\t\tAND TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) >= CAST('02:00:00' AS TIME)\n" +
+					"\t\tAND `f1`.`Departure` != `f3`.`Departure`\n" +
+					"\t\tAND `f1`.`Destination` != `f3`.`Destination`\n" +
+			")\n"
+		)).hide()
 	},
 	track: {
 		construct: function() {
@@ -388,7 +660,17 @@ menu.actions = {
 		},
 		destruct: function() {
 			$("#main").table_ticket("destroy");
-		}
+		},
+		sql: $('<div>').appendTo("#sql").append($('<pre class="brush: sql">').text(
+			"SELECT\n" +
+				"\t`Favorite`.`id`, `Favorite`.`user_id`,\n" +
+				"\t`ticket_view`.*\n" +
+			"FROM `ticket_view`\n" +
+				"\tINNER JOIN `Favorite`\n" +
+				"\tON `ticket_view`.`f1_id` = `Favorite`.`flight_id1`\n" +
+				"\tAND `ticket_view`.`f2_id` <=> `Favorite`.`flight_id2`\n" +
+				"\tAND `ticket_view`.`f3_id` <=> `Favorite`.`flight_id3`\n"
+		)).hide()
 	}
 };
 

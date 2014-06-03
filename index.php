@@ -13,6 +13,8 @@ if($user = test_login()) {
 	<link rel="stylesheet" href="css/lib/jquery.sidr.<?=$user->power == 1 ? "dark" : "light"?>.css">
 	<link rel="stylesheet" href="css/lib/bootstrap.min.css">
 	<link rel="stylesheet" href="css/lib/jquery.remodal.css">
+	<link rel="stylesheet" href="css/lib/highlight/shCoreMidnight.css">
+	<link rel="stylesheet" href="css/lib/highlight/shThemeMidnight.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/lib/custom-theme/jquery-ui-1.10.4.custom.min.css">
 </head>
@@ -63,6 +65,20 @@ if($user = test_login()) {
 </h1>
 <hr>
 <div id="main"></div>
+<br><a href="#" id="sql_button" class="btn btn-default" data-toggle="modal" data-target="#modal-sql">Show SQL</a>
+</div>
+
+<div class="modal fade" id="modal-sql">
+<div class="modal-dialog modal-lg">
+<div class="modal-content" style="background-color: #0f192a">
+	<div class="modal-header" style="color: white">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h4 class="modal-title">SQL</h4>
+	</div>
+	<div class="modal-body" id="sql">
+	</div>
+</div>
+</div>
 </div>
 
 <script>
@@ -73,6 +89,8 @@ var user = <?=json_encode($user)?>;
 <script src="js/lib/jquery.sidr.min.js"></script>
 <script src="js/lib/jquery.remodal.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/highlight/shCore.js"></script>
+<script src="js/lib/highlight/shBrushSql.js"></script>
 <script src="js/jquery-table.js"></script>
 <script src="js/jquery-ticket.js"></script>
 <script src="js/jquery-airport.js"></script>
