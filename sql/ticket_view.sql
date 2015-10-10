@@ -63,12 +63,12 @@ UNION
 SELECT
 	1,
     
-	`f1`.`id`,
-	`f2`.`id`,
-	null,
+	`f1`.`id` AS `f1_id`,
+	`f2`.`id` AS `f2_id`,
+	null AS `f3_id`,
     
 	`f1`.`Flight number`,
-    `f2`.`Flight number`,
+    `f2`.`Flight number` asd,
     null,
     
     `f1`.`Departure`,
@@ -98,13 +98,13 @@ SELECT
     TIMEDIFF(`f2`.`Departure time`, `f1`.`Arrival time`) > CAST('12:00:00' AS TIME),
     (`f1`.`Price` + `f2`.`Price`) * 0.9,
     
-    `f1`.`Destination`,
-    `f1`.`Destination name`,
-    `f1`.`Destination country`, 
-    `f1`.`Destination city`, 
-    `f1`.`Destination timezone`, 
-    `f1`.`Destination longitude`, 
-    `f1`.`Destination latitude`,
+    `f1`.`Destination` as sss,
+    `f1`.`Destination name` as ssss,
+    `f1`.`Destination country` as sssss, 
+    `f1`.`Destination city` as ssssss, 
+    `f1`.`Destination timezone` as sssssss, 
+    `f1`.`Destination longitude` as ssssssss, 
+    `f1`.`Destination latitude` as asdadasd,
     
     null,
     null,
@@ -114,13 +114,13 @@ SELECT
     null,
     null,
     
-    `f1`.`Arrival time`,
-    `f2`.`Departure time`,
+    `f1`.`Arrival time` qwe,
+    `f2`.`Departure time` ewq,
     null,
     null,
     
-    `f1`.`Flight time`,
-    `f2`.`Flight time`,
+    `f1`.`Flight time`fff,
+    `f2`.`Flight time`ggg,
     null
 FROM `flight_view` AS `f1`
 	INNER JOIN `flight_view` AS `f2`
@@ -132,13 +132,13 @@ UNION
 SELECT
 	2,
     
-	`f1`.`id`,
-	`f2`.`id`,
-	`f3`.`id`,
+	`f1`.`id` a,
+	`f2`.`id` s,
+	`f3`.`id` d,
     
-	`f1`.`Flight number`,
-    `f2`.`Flight number`,
-    `f3`.`Flight number`,
+	`f1`.`Flight number` qq,
+    `f2`.`Flight number` ww,
+    `f3`.`Flight number` ee,
     
     `f1`.`Departure`,
     `f1`.`Departure name`,
@@ -168,30 +168,30 @@ SELECT
         TIMEDIFF(`f3`.`Departure time`, `f2`.`Arrival time`) > CAST('12:00:00' AS TIME),
     (`f1`.`Price` + `f2`.`Price` + `f3`.`Price`) * 0.8,
     
-    `f2`.`Departure`,
-    `f2`.`Departure name`,
-    `f2`.`Departure country`,
-    `f2`.`Departure city`,
-    `f2`.`Departure timezone`,
-    `f2`.`Departure longitude`,
-    `f2`.`Departure latitude`,
+    `f2`.`Departure`  bbb,
+    `f2`.`Departure name` ggg,
+    `f2`.`Departure country` hhh,
+    `f2`.`Departure city` jjj,
+    `f2`.`Departure timezone` kkk,
+    `f2`.`Departure longitude` lll,
+    `f2`.`Departure latitude` uuu,
     
-    `f3`.`Departure`,
-    `f3`.`Departure name`,
-    `f3`.`Departure country`,
-    `f3`.`Departure city`,
-    `f3`.`Departure timezone`,
-    `f3`.`Departure longitude`,
-    `f3`.`Departure latitude`,
+    `f3`.`Departure` yyy,
+    `f3`.`Departure name` ttt,
+    `f3`.`Departure country` ooo,
+    `f3`.`Departure city` ppp,
+    `f3`.`Departure timezone` tttt,
+    `f3`.`Departure longitude` yyyy,
+    `f3`.`Departure latitude` uuuu,
     
-    `f1`.`Arrival time`,
-    `f2`.`Departure time`,
-    `f2`.`Arrival time`,
-    `f3`.`Departure time`,
+    `f1`.`Arrival time` iiii,
+    `f2`.`Departure time` oooo,
+    `f2`.`Arrival time` pppp,
+    `f3`.`Departure time` llll,
     
-    `f1`.`Flight time`,
-    `f2`.`Flight time`,
-    `f3`.`Flight time`
+    `f1`.`Flight time` aaaaaaa,
+    `f2`.`Flight time` wwwwwww,
+    `f3`.`Flight time` fffffff
 FROM `flight_view` AS `f1`
 	INNER JOIN `flight_view` AS `f2`
     	ON `f1`.`Destination` = `f2`.`Departure`
